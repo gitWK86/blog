@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://yoursite.com/2018/11/19/FFmpeg%E5%85%A5%E9%97%A8-%E4%B8%80/</loc>
+    <lastmod>2018-11-20T10:12:12.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/28/Netty%E5%AD%A6%E4%B9%A0-%E4%B8%80/</loc>
+    <lastmod>2018-11-19T05:12:08.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/17/Android-JNI%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2018-08-29T12:53:51.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/24/Java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%8F%8AGC%E5%9B%9E%E6%94%B6/</loc>
+    <lastmod>2018-08-24T07:47:39.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/22/Android%E4%B8%AD%E7%9A%84ClassLoader%E7%AE%80%E6%9E%90/</loc>
+    <lastmod>2018-08-22T05:27:29.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/22/Java%E4%B8%AD%E7%9A%84ClassLoader%E7%AE%80%E6%9E%90/</loc>
+    <lastmod>2018-08-22T04:58:48.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/20/LinkedHashMap%E5%92%8CLRU/</loc>
+    <lastmod>2018-08-20T07:53:37.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/15/Java%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</loc>
+    <lastmod>2018-08-19T04:13:30.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/13/ThreadLocal%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2018-08-13T03:25:38.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/10/TCP%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%BC%A0%E8%BE%93/</loc>
+    <lastmod>2018-08-11T02:12:19.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/08/Java%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8AQS/</loc>
+    <lastmod>2018-08-07T11:19:13.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/07/Binder%E6%9C%BA%E5%88%B6%E7%AE%80%E6%9E%90-%E5%9B%9B/</loc>
+    <lastmod>2018-08-07T11:18:56.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/05/Binder%E6%9C%BA%E5%88%B6%E7%AE%80%E6%9E%90-%E4%B8%89/</loc>
+    <lastmod>2018-08-07T11:18:43.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/03/Binder%E6%9C%BA%E5%88%B6%E7%AE%80%E6%9E%90-%E4%BA%8C/</loc>
+    <lastmod>2018-08-07T11:18:28.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/12/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    <lastmod>2018-08-04T07:06:40.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/13/ConcurrentHashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    <lastmod>2018-08-04T05:51:05.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/01/C-%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2018-08-03T09:31:02.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/31/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2018-08-01T01:54:32.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/28/Volatile%E5%85%B3%E9%94%AE%E5%AD%97/</loc>
+    <lastmod>2018-07-31T11:40:52.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/30/synchronized%E5%85%B3%E9%94%AE%E5%AD%97/</loc>
+    <lastmod>2018-07-31T02:45:17.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/24/Reactor%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2018-07-27T08:31:25.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/25/ActivityRecord/</loc>
+    <lastmod>2018-07-27T06:51:05.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/27/Service%E7%BB%84%E4%BB%B6%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/</loc>
+    <lastmod>2018-07-27T06:31:23.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/08/02/Binder%E6%9C%BA%E5%88%B6%E7%AE%80%E6%9E%90-%E4%B8%80/</loc>
+    <lastmod>2018-07-27T02:56:49.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/25/Android%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2018-07-26T08:03:46.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/29/Android-Content-Provide%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</loc>
+    <lastmod>2018-07-26T07:42:42.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/25/Android%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8BProcessRecord/</loc>
+    <lastmod>2018-07-26T02:53:42.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/25/Activity%E7%BB%84%E4%BB%B6%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/</loc>
+    <lastmod>2018-07-25T08:16:46.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/19/Zygote%E5%92%8CSystemServer/</loc>
+    <lastmod>2018-07-25T07:37:28.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/20/ActivityManagerService/</loc>
+    <lastmod>2018-07-25T07:04:09.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/22/Android%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2018-07-25T07:03:48.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/20/Android%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8/</loc>
+    <lastmod>2018-07-25T07:03:41.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/24/Linux%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/</loc>
+    <lastmod>2018-07-24T07:08:49.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/23/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2018-07-23T11:44:17.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/21/I-O%E5%A4%9A%E8%B7%AF%E8%BD%AC%E6%8D%A2select%E3%80%81poll/</loc>
+    <lastmod>2018-07-23T01:15:49.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/21/Linux%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6/</loc>
+    <lastmod>2018-07-21T05:51:31.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/16/%E7%BC%96%E8%AF%91%E6%97%B6%E6%B3%A8%E8%A7%A3Kapt/</loc>
+    <lastmod>2018-07-19T07:59:22.000Z</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2018/07/16/%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84mmap/</loc>
+    <lastmod>2018-07-16T12:03:11.000Z</lastmod>
+  </url>
+</urlset>

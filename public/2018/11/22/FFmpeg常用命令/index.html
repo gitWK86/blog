@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="本网站主要供个人学习记录使用，如有侵权请立即邮件联系"><meta name="keywords" content="Android, Java, Linux, 数据结构"><title>FFmpeg常用命令 | Programmer Liu</title><link rel="stylesheet" type="text/css" href="//fonts.neworld.org/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">FFmpeg常用命令</h1><a id="logo" href="/.">Programmer Liu</a><p class="description">一只有崇高理想的的程序猿</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">FFmpeg常用命令</h1><div class="post-meta"><a href="/2018/11/22/FFmpeg常用命令/#comments" class="comment-count"></a><p><span class="date">Nov 22, 2018</span><span><a href="/categories/音视频/" class="category">音视频</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>FFmpeg 是一套可以用来记录、转换数字音频、视频，并能将其转化为流的开源计算机程序。本文将简单介绍FFmpeg库的基本目录结构及其功能，然后会介绍一些常用的FFmpeg命令，了解FFmpeg到底能做些什么。</p>
+<h3 id="音视频基本处理流程"><a href="#音视频基本处理流程" class="headerlink" title="音视频基本处理流程"></a>音视频基本处理流程</h3><p>对于音视频的处理基本遵循下面的流程：</p>
+<p><img src="/2018/11/22/FFmpeg常用命令/ffmpeg23.png" alt=""></p>
+<h3 id="FFmpeg目录及功能"><a href="#FFmpeg目录及功能" class="headerlink" title="FFmpeg目录及功能"></a>FFmpeg目录及功能</h3><table>
+<thead>
+<tr>
+<th>libavcodec</th>
+<th>提供了一系列编解码器的实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>libavcodec</td>
+<td>用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构和读取音视频帧等功能</td>
+</tr>
+<tr>
+<td>libavutil</td>
+<td>包含一些公共的工具函数</td>
+</tr>
+<tr>
+<td>libavutil</td>
+<td>提供了各种音视频过滤器</td>
+</tr>
+<tr>
+<td>libavdevice</td>
+<td>提供了各种音视频过滤器</td>
+</tr>
+<tr>
+<td>libswscale</td>
+<td>提供了视频场景比例缩放、色彩映射转换功能</td>
+</tr>
+<tr>
+<td>libswresample</td>
+<td>实现了混音和重采样</td>
+</tr>
+</tbody>
+</table>
+<h3 id="信息查询命令"><a href="#信息查询命令" class="headerlink" title="信息查询命令"></a>信息查询命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FFmpeg -version</td>
+<td>显示版本</td>
+</tr>
+<tr>
+<td>-formats</td>
+<td>显示可用的格式（包括设备）</td>
+</tr>
+<tr>
+<td>-demuxers</td>
+<td>显示可用的demuxers</td>
+</tr>
+<tr>
+<td>-muxers</td>
+<td>显示可用的muxers</td>
+</tr>
+<tr>
+<td>-devices</td>
+<td>显示可用的设备</td>
+</tr>
+<tr>
+<td>-codecs</td>
+<td>显示已知的所有编解码器</td>
+</tr>
+<tr>
+<td>-decoders</td>
+<td>显示可用的解码器</td>
+</tr>
+<tr>
+<td>-encoders</td>
+<td>显示所有可用的编码器</td>
+</tr>
+<tr>
+<td>-bsfs</td>
+<td>显示可用的比特流filter</td>
+</tr>
+<tr>
+<td>-protocols</td>
+<td>显示可用的协议</td>
+</tr>
+<tr>
+<td>-filters</td>
+<td>显示可用的过滤器</td>
+</tr>
+<tr>
+<td>-pix_fmts</td>
+<td>显示可用的像素格式</td>
+</tr>
+<tr>
+<td>-sample_fmts</td>
+<td>显示可用的采样格式</td>
+</tr>
+<tr>
+<td>-layouts</td>
+<td>显示channel名称和标准channel布局</td>
+</tr>
+<tr>
+<td>-colors</td>
+<td>显示识别的颜色名称</td>
+</tr>
+</tbody>
+</table>
+<h2 id="设备列表"><a href="#设备列表" class="headerlink" title="设备列表"></a>设备列表</h2><p><code>ffmpeg -f avfoundation -list_devices true -i “”</code></p>
+<p>查看Mac上支持的设备列表</p>
+<h2 id="录屏"><a href="#录屏" class="headerlink" title="录屏"></a>录屏</h2><p><code>ffmpeg -f avfoundation -i 1 -r 30 out.yuv</code></p>
+<p>-f 指定使用 avfoundation 采集数据。<br>-i 指定从哪儿采集数据，它是一个文件索引号。<br>-r 指定帧率。`</p>
+<h2 id="录屏-声音"><a href="#录屏-声音" class="headerlink" title="录屏+声音"></a>录屏+声音</h2><p><code>ffmpeg -f avfoundation -i 1:0 -r 29.97 -c:v libx264 -crf 0 -c:a libfdk_aac -profile:a aac_he_v2 -b:a 32k out.flv</code></p>
+<p>-i 1:0 冒号前面的 “1” 代表的屏幕索引号。冒号后面的”0”代表的声音索相号。<br>-c:v 与参数 -vcodec 一样，表示视频编码器。c 是 codec 的缩写，v 是video的缩写。<br>-crf 是 x264 的参数。 0 表式无损压缩。<br>-c:a 与参数 -acodec 一样，表示音频编码器。<br>-profile 是 fdk_aac 的参数。 aac_he_v2 表式使用 AAC_HE v2 压缩数据。<br>-b:a 指定音频码率。 b 是 bitrate的缩写, a是 audio的缩与。</p>
+<h2 id="抽取音频和视频"><a href="#抽取音频和视频" class="headerlink" title="抽取音频和视频"></a>抽取音频和视频</h2><p><code>ffmpeg -i input_file -vcodec copy -an output_file_video　　//分离视频流</code><br><code>ffmpeg -i input_file -acodec copy -vn output_file_audio　　//分离音频流</code></p>
+<p>vcodec: 指定视频编码器，copy 指明只拷贝，不做编解码。</p>
+<p>an: a 代表视频，n 代表 no 也就是无音频的意思。</p>
+<p>acodec: 指定音频编码器，copy 指明只拷贝，不做编解码。</p>
+<p>vn: v 代表视频，n 代表 no 也就是无视频的意思。</p>
+<h2 id="转格式"><a href="#转格式" class="headerlink" title="转格式"></a>转格式</h2><p><code>ffmpeg -i test.mp4 -vcodec copy -acodec copy test.flv</code></p>
+<p>音频、视频都直接 copy，只是将 mp4 的封装格式转成了flv</p>
+<h2 id="音视频合并"><a href="#音视频合并" class="headerlink" title="音视频合并"></a>音视频合并</h2><p><code>ffmpeg -i out.h264 -i out.aac -vcodec copy -acodec copy out.mp4</code></p>
+<p>视频和音频直接拷贝，合成一个mp4格式文件</p>
+<h2 id="YUV转H264"><a href="#YUV转H264" class="headerlink" title="YUV转H264"></a>YUV转H264</h2><p><code>ffmpeg -f rawvideo -pix_fmt yuv420p -s 320x240 -r 30 -i out.yuv -c:v libx264 -f rawvideo out.h264</code></p>
+<h2 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h2><p>首先创建一个 inputs.txt 文件，文件内容如下：<br>file ‘1.flv’<br>file ‘2.flv’<br>file ‘3.flv’<br>然后执行下面的命令：<br><code>ffmpeg -f concat -i inputs.txt -c copy output.flv</code></p>
+<h2 id="视频剪切"><a href="#视频剪切" class="headerlink" title="视频剪切"></a>视频剪切</h2><p><code>ffmpeg -ss 0:1:30 -t 0:0:20 -i input.avi -vcodec copy -acodec copy output.avi //剪切视频</code><br>-ss 开始时间<br>-t 持续时间</p>
+<h2 id="视频缩小一倍"><a href="#视频缩小一倍" class="headerlink" title="视频缩小一倍"></a>视频缩小一倍</h2><p><code>ffmpeg -i out.mp4 -vf scale=iw/2:-1 scale.mp4</code><br>-vf scale 指定使用简单过滤器 scale，iw/2:-1 中的 iw 指定按整型取视频的宽度。 -1 表示高度随宽度一起变化。</p>
+<h2 id="视频图片互转"><a href="#视频图片互转" class="headerlink" title="视频图片互转"></a>视频图片互转</h2><p><code>ffmpeg -i test.flv -r 1 -f image2 image-%3d.jpeg  //视频转JPEG</code><br><code>ffmpeg -i out.mp4 -ss 00:00:00 -t 10 out.gif  //视频转gif</code><br><code>ffmpeg -f image2 -i image-%3d.jpeg images.mp4 //图片转视频</code></p>
+<h2 id="添加水印"><a href="#添加水印" class="headerlink" title="添加水印"></a>添加水印</h2><p><code>ffmpeg -i out.mp4 -vf “movie=logo.png,scale=64:48[watermask];[in][watermask] overlay=30:10 [out]” water.mp4</code></p>
+<p>-vf中的 movie 指定logo位置。scale 指定 logo 大小。overlay 指定 logo 摆放的位置</p>
+<h2 id="直播推流"><a href="#直播推流" class="headerlink" title="直播推流"></a>直播推流</h2><p><code>ffmpeg -re -i out.mp4 -c copy -f flv rtmp://server/live/streamName</code></p>
+<h2 id="直播拉流保存"><a href="#直播拉流保存" class="headerlink" title="直播拉流保存"></a>直播拉流保存</h2><p><code>ffmpeg -i rtmp://server/live/streamName -c copy dump.flv</code></p>
+</div><div class="tags"><a href="/tags/音视频/">音视频</a><a href="/tags/FFmpeg/">FFmpeg</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/11/23/FFmpeg实现简单直播系统/" class="pre">FFmpeg实现简单直播系统</a><a href="/2018/11/21/Mac下FFmpeg的下载-编译和安装/" class="next">FFmpeg的下载,编译和安装</a></div><div id="comments"><div id="lv-container" data-id="city" data-uid="MTAyMC8zODA5Ny8xNDYyNw=="></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#音视频基本处理流程"><span class="toc-text">音视频基本处理流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FFmpeg目录及功能"><span class="toc-text">FFmpeg目录及功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信息查询命令"><span class="toc-text">信息查询命令</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#设备列表"><span class="toc-text">设备列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#录屏"><span class="toc-text">录屏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#录屏-声音"><span class="toc-text">录屏+声音</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抽取音频和视频"><span class="toc-text">抽取音频和视频</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转格式"><span class="toc-text">转格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#音视频合并"><span class="toc-text">音视频合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YUV转H264"><span class="toc-text">YUV转H264</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合并"><span class="toc-text">合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视频剪切"><span class="toc-text">视频剪切</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视频缩小一倍"><span class="toc-text">视频缩小一倍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视频图片互转"><span class="toc-text">视频图片互转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加水印"><span class="toc-text">添加水印</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直播推流"><span class="toc-text">直播推流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直播拉流保存"><span class="toc-text">直播拉流保存</span></a></li></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/11/23/FFmpeg常用结构体、方法简介/">FFmpeg常用结构体、方法简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/23/FFmpeg常用结构体分析/">FFmpeg常用结构体分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/23/FFmpeg实现简单直播系统/">FFmpeg实现简单直播系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/FFmpeg常用命令/">FFmpeg常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/Mac下FFmpeg的下载-编译和安装/">FFmpeg的下载,编译和安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/19/音视频基础概念/">音视频基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/28/Netty学习-一/">Netty学习(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/Java内存分配及GC回收/">Java内存分配及GC回收</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/22/Android中的ClassLoader简析/">Android中的ClassLoader简析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/22/Java中的ClassLoader简析/">Java中的ClassLoader简析</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android系统/">Android系统</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kotlin/">Kotlin</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux系统/">Linux系统</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Netty/">Netty</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/音视频/">音视频</a><span class="category-list-count">6</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/JNI/" style="font-size: 15px;">JNI</a> <a href="/tags/NDK/" style="font-size: 15px;">NDK</a> <a href="/tags/ClassLoader/" style="font-size: 15px;">ClassLoader</a> <a href="/tags/BroadCast/" style="font-size: 15px;">BroadCast</a> <a href="/tags/原理/" style="font-size: 15px;">原理</a> <a href="/tags/binder/" style="font-size: 15px;">binder</a> <a href="/tags/C/" style="font-size: 15px;">C++</a> <a href="/tags/指针/" style="font-size: 15px;">指针</a> <a href="/tags/音视频/" style="font-size: 15px;">音视频</a> <a href="/tags/FFmpeg/" style="font-size: 15px;">FFmpeg</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/系统/" style="font-size: 15px;">系统</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/系统调用/" style="font-size: 15px;">系统调用</a> <a href="/tags/内存/" style="font-size: 15px;">内存</a> <a href="/tags/GC/" style="font-size: 15px;">GC</a> <a href="/tags/同步/" style="font-size: 15px;">同步</a> <a href="/tags/JMM/" style="font-size: 15px;">JMM</a> <a href="/tags/AQS/" style="font-size: 15px;">AQS</a> <a href="/tags/LRU/" style="font-size: 15px;">LRU</a> <a href="/tags/Netty/" style="font-size: 15px;">Netty</a> <a href="/tags/Reactor/" style="font-size: 15px;">Reactor</a> <a href="/tags/高性能/" style="font-size: 15px;">高性能</a> <a href="/tags/TCP/" style="font-size: 15px;">TCP</a> <a href="/tags/编译时注解/" style="font-size: 15px;">编译时注解</a> <a href="/tags/KAPT/" style="font-size: 15px;">KAPT</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="http://gityuan.com/" title="Gityuan" target="_blank">Gityuan</a><ul></ul><a href="https://richardwrq.github.io/" title="Richard Wu" target="_blank">Richard Wu</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">刘伟.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script><script>(function(d, s) {
+  var j, e = d.getElementsByTagName('body')[0];
+  if (typeof LivereTower === 'function') { return; }
+  j = d.createElement(s);
+  j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+  j.async = true;
+  e.appendChild(j);
+})(document, 'script');
+</script></body></html>

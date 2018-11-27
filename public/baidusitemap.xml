@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://yoursite.com/2018/11/23/FFmpeg%E5%B8%B8%E7%94%A8%E7%BB%93%E6%9E%84%E4%BD%93%E3%80%81%E6%96%B9%E6%B3%95%E7%AE%80%E4%BB%8B/</loc>
-    <lastmod>2018-11-27T06:52:03.000Z</lastmod>
+    <loc>http://yoursite.com/2018/08/01/C-%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2018-11-27T07:42:51.000Z</lastmod>
   </url>  <url>
-    <loc>http://yoursite.com/2018/11/23/FFmpeg%E5%B8%B8%E7%94%A8%E7%BB%93%E6%9E%84%E4%BD%93%E5%88%86%E6%9E%90/</loc>
-    <lastmod>2018-11-23T09:29:37.000Z</lastmod>
+    <loc>http://yoursite.com/2018/11/23/FFmpeg%E5%B8%B8%E7%94%A8%E7%BB%93%E6%9E%84%E4%BD%93%E3%80%81%E6%96%B9%E6%B3%95%E7%AE%80%E4%BB%8B/</loc>
+    <lastmod>2018-11-27T06:59:47.000Z</lastmod>
   </url>  <url>
     <loc>http://yoursite.com/2018/11/23/FFmpeg%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9B%B4%E6%92%AD%E7%B3%BB%E7%BB%9F/</loc>
     <lastmod>2018-11-23T02:43:31.000Z</lastmod>
@@ -63,9 +63,6 @@
   </url>  <url>
     <loc>http://yoursite.com/2018/08/13/ConcurrentHashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     <lastmod>2018-08-04T05:51:05.000Z</lastmod>
-  </url>  <url>
-    <loc>http://yoursite.com/2018/08/01/C-%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2018-08-03T09:31:02.000Z</lastmod>
   </url>  <url>
     <loc>http://yoursite.com/2018/07/31/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2018-08-01T01:54:32.000Z</lastmod>

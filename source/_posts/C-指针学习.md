@@ -2,9 +2,9 @@
 title: C++指针学习
 date: 2018-08-01 18:28:02
 categories: 
-- C++
+- C/C++
 tags:
-- C++
+- C/C++
 - 指针
 ---
 

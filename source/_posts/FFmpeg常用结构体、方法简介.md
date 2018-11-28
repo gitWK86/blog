@@ -156,7 +156,13 @@ int av_read_frame(AVFormatContext *s, AVPacket *pkt);
 
 读取码流中的若干音频帧或者1帧视频。
 
+### av_rescale_q
 
+```C
+int64_t av_rescale_q(int64_t a, AVRational bq, AVRational cq)
+```
+
+这个函数的作用是计算a * bq / cq，来把时间戳从一个时基调整到另外一个时基。
 
 ### av_write_frame
 

@@ -205,4 +205,4 @@ video_stream_index = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, NU
 packet.dts = av_rescale_q_rnd(packet.dts, in_stream->time_base, out_stream->time_base, (AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
 ```
 
-基本上就是一些参数的改变，所有流程和代码保持不变，就可以把一个音视频文件中的视频数据抽取出来了，mp4、H264等格式随便，就是这个简单。。。
+基本上就是一些参数的改变，所有流程和代码保持不变，就可以把一个音视频文件中的视频数据抽取出来了，mp4、H264等格式随便，就是这么简单。。。

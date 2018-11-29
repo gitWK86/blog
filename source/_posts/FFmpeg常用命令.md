@@ -63,7 +63,7 @@ FFmpeg 是一套可以用来记录、转换数字音频、视频，并能将其�
 
 -f 指定使用 avfoundation 采集数据。
 -i 指定从哪儿采集数据，它是一个文件索引号。
--r 指定帧率。`
+-r 指定帧率。
 
 ## 录屏+声音
 
@@ -81,6 +81,7 @@ FFmpeg 是一套可以用来记录、转换数字音频、视频，并能将其�
 ## 抽取音频和视频
 
 `ffmpeg -i input_file -vcodec copy -an output_file_video　　//分离视频流`
+
 `ffmpeg -i input_file -acodec copy -vn output_file_audio　　//分离音频流`
 
 vcodec: 指定视频编码器，copy 指明只拷贝，不做编解码。

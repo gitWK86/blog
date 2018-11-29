@@ -1,5 +1,5 @@
 ---
-title: FFmpeg抽取音频数据
+title: FFmpeg抽取音频、视频数据
 date: 2018-11-27 16:39:17
 categories: 
 - 音视频
@@ -10,7 +10,7 @@ tags:
 
 
 
-今天开始撸代码，使用FFmpeg的API抽取一个MP4文件的音频数据。
+今天开始撸代码，首先使用FFmpeg的API抽取一个MP4文件的音频数据。
 
 ## IDE
 
@@ -20,7 +20,7 @@ tags:
 
 在新建一个C项目后，需要把FFmpeg的库导入才能正常运行。我们修改项目的CMakeLists.txt文件。
 
-![](FFmpeg抽取音频数据/extr_voice.png)
+![](FFmpeg抽取音频-视频数据/extr_voice.png)
 
 
 
@@ -188,3 +188,21 @@ avio_close(ofmt_ctx->pb);
 ### 执行
 
 `./MyC /Users/david/Desktop/1080p.mov /Users/david/Desktop/test.aac`
+
+
+
+## 抽取视频数据
+
+抽取视频信息并保存在文件中的流程甚至代码和上面抽取音频基本一致。
+
+``` c
+//拿到文件中音频流 或者 视频流，所有流都在streams数组中
+ in_stream = fmt_ctx->streams[1];
+
+//找到最好的视频流
+video_stream_index = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
+
+packet.dts = av_rescale_q_rnd(packet.dts, in_stream->time_base, out_stream->time_base, (AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+```
+
+基本上就是一些参数的改变，所有流程和代码保持不变，就可以把一个音视频文件中的视频数据抽取出来了，mp4、H264等格式随便，就是这个简单。。。

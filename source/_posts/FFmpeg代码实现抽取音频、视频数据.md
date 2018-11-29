@@ -1,6 +1,6 @@
 ---
-title: FFmpeg抽取音频、视频数据
-date: 2018-11-27 16:39:17
+title: FFmpeg代码实现抽取音频、视频数据
+date: 2018-11-29 16:40:27
 categories: 
 - 音视频
 tags:
@@ -20,7 +20,7 @@ tags:
 
 在新建一个C项目后，需要把FFmpeg的库导入才能正常运行。我们修改项目的CMakeLists.txt文件。
 
-![](FFmpeg抽取音频-视频数据/extr_voice.png)
+![](FFmpeg代码实现抽取音频、视频数据/extr_voice.png)
 
 
 

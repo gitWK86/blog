@@ -1,6 +1,6 @@
 ---
 title: FFmpeg代码实现抽取音频、视频数据
-date: 2018-11-29 16:40:27
+date: 2018-11-27 16:40:27
 categories: 
 - 音视频
 tags:

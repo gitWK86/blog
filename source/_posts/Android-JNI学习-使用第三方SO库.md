@@ -10,7 +10,7 @@ tags:
 
 正在准备中的项目里，有一部分打算直接移殖Linux开发组在之前就完成的功能，他们是使用C语言开发。考虑到维护的问题，准备让他们将代码打包成so文件，再引用到我的项目中。这样也就相当于我去引用一个第三方库，并且这个库中的代码格式也不一定是我们JNI开发时规定的命名，因此，需要通过我自己的C文件再去调用so库中的方法。
 
-## 生成SO库
+# 生成SO库
 
 ### Native方法
 
@@ -30,15 +30,22 @@ public native String getString();
 
 
 
-![](/Android-JNI学习-使用第三方SO库/jni-so1.png)
+![](https://upload-images.jianshu.io/upload_images/3809817-c4046ae731276f29.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-
-
-![](/Android-JNI学习-使用第三方SO库/jni-so2.png)
-
-
+```
+Program:   $JDKPath$\bin\javah.exe 
+Arguments:  -classpath . -jni -o $ModuleFileDir$\src\main\jni\$Prompt$  $FileClass$ 
+Working directory: $ModuleFileDir$\src\main\java
+```
 
 在我们声明native方法的类上点击右键，javah，输入命名（我命名为Test.h)，之后就会先自动创建一个jni文件夹，然后生成一个Test.h文件，copy Test.h，并将命名改为Test.c。
+
+![](https://upload-images.jianshu.io/upload_images/3809817-469baae7078430a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+
+
+
 
 ### 完成C代码
 
@@ -113,17 +120,19 @@ ndk {
 
 编译完成后就如下图，产生一个libTest.so的文件，这就是我们要的。把它当做Linux最后打包成的so文件。
 
-![](/Android-JNI学习-使用第三方SO库/jni-so3.png)
+![](https://upload-images.jianshu.io/upload_images/3809817-caee5784088bdb17.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 
 
 
-## 导入第三方so
+
+# 导入第三方so
 
 新建一个项目JNIUseSoDemo，项目结构如下。同样是在MainActivity中定义Native方法，生成UseSo.c。将我们上一步生成的so文件拷贝到jniLibs下（armeabi-v7a是平台）。以及上一步中的头文件也拷贝到jni下。
 
-![](/Android-JNI学习-使用第三方SO库/jni-so4.png)
+![](https://upload-images.jianshu.io/upload_images/3809817-120270e98dea640c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 
 
@@ -246,8 +255,9 @@ public class MainActivity extends Activity {
 }
 ```
 
-![](/Android-JNI学习-使用第三方SO库/jni-so5.png)
+![](https://upload-images.jianshu.io/upload_images/3809817-07915a8ceb23d42d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 
-验证没有问题！
+
+验证没有问题，导入第三方so库完成。

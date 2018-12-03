@@ -2,7 +2,7 @@
 title: Android JNI学习
 date: 2018-08-17 16:26:23
 categories: 
-- Android系统
+- Android开发
 tags:
 - JNI
 - NDK
@@ -193,9 +193,9 @@ Java_com_liuwei_ndktest_MainActivity_say(JNIEnv *env, jobject instance) {
 例如：
 
  "()V" 就表示void Func();
- 
+
  "(II)V" 表示 void Func(int, int);
- 
+
  "(Ljava/lang/String;Ljava/lang/String;)I".表示 int Func(String,String)
 
 ![](Android-JNI学习/jni6.png)

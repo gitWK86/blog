@@ -2,7 +2,7 @@
 title: FFmpeg中的时间戳与时间基
 date: 2018-12-05 13:42:44
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - 音视频
 - FFmpeg

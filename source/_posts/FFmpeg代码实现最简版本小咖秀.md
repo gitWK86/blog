@@ -2,7 +2,7 @@
 title: FFmpeg代码实现最简版本小咖秀
 date: 2018-12-07 16:27:40
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - 音视频
 - FFmpeg

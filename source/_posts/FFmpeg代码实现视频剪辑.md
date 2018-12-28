@@ -2,7 +2,7 @@
 title: FFmpeg代码实现视频剪切
 date: 2018-12-06 12:07:22
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - 音视频
 - FFmpeg

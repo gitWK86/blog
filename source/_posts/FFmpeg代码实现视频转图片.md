@@ -2,7 +2,7 @@
 title: FFmpeg代码实现视频转图片
 date: 2018-12-10 18:59:09
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - 音视频
 - FFmpeg

@@ -2,7 +2,7 @@
 title: FFmpeg常用结构体、方法简介
 date: 2018-11-23 19:58:59
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - 音视频
 - FFmpeg

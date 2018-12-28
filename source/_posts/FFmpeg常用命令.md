@@ -2,7 +2,7 @@
 title: FFmpeg常用命令
 date: 2018-11-22 13:43:30
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - 音视频
 - FFmpeg

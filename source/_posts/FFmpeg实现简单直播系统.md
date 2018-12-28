@@ -2,7 +2,7 @@
 title: FFmpeg实现简单直播系统
 date: 2018-11-23 09:48:29
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - 音视频
 - FFmpeg

@@ -2,7 +2,7 @@
 title: 'FFmpeg的下载,编译和安装'
 date: 2018-11-21 11:52:21
 categories: 
-- 音视频
+- FFmpeg
 tags:
 - FFmpeg
 ---

@@ -2,7 +2,7 @@
 title: FFmpeg代码实现Camera2 rtmp推流直播
 date: 2019-01-03 11:15:04
 categories: 
-- FFmpeg
+- Android音视频
 tags:
 - 音视频
 - FFmpeg

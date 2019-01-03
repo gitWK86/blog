@@ -1,8 +1,8 @@
 ---
-title: Android Camera2预览及YUV数据获取
+title: Android音视频（一）使用MediaRecorder录制视频
 date: 2018-12-26 14:27:01
 categories: 
-- Android开发
+- Android音视频
 tags:
 - Camera2
 - 直播
@@ -14,7 +14,7 @@ tags:
 
 在Android API21中Google发布了Camera2来取代原本的Camera，两者的变动也是比较大的。
 
-![](Android-Camera2预览及YUV数据获取/camera2-1.png)
+![](Android音视频（一）使用MediaRecorder录制视频/camera2-1.png)
 
 Camera2中Google采用了pipeline（管道）的概念，将Camera Device相机设备和Android Device安卓设备连接起来， Android Device通过管道发送CaptureRequest请求给Camera Device，Camera Device通过管道返回CameraMetadata数据给Android Device，这一切建立在一个叫作CameraCaptureSession的会话中。
 

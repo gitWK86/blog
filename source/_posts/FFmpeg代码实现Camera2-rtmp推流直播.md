@@ -19,6 +19,8 @@ tags:
 
 ### 2、YUV数据
 
+详情请见 
+
 ### 3、RTMP服务器搭建
 
 ## 开发
@@ -28,9 +30,3 @@ tags:
 ### 2、初始化FFmpeg
 
 ### 3、推送数据
-
-## 参考
-
-[图文详解YUV420数据格式](https://www.cnblogs.com/azraelly/archive/2013/01/01/2841269.html)
-
-[Android Image类浅析(结合YUV_420_888)](https://www.polarxiong.com/archives/Android-Image%E7%B1%BB%E6%B5%85%E6%9E%90-%E7%BB%93%E5%90%88YUV_420_888.html)

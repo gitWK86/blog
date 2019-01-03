@@ -1,5 +1,5 @@
 ---
-title: 安卓程序员需要知道的交叉编译和Makefile知识
+title: 写给安卓程序员的C/C++编译入门(交叉编译，Makefile)
 date: 2019-01-05 15:54:16
 categories: 
 - C/C++
@@ -36,7 +36,7 @@ gcc test.c -o test
 
 C/C++的编译可以分为下面几个步骤:
 
-![](/安卓程序员需要知道的交叉编译和Makefile知识/c-c++.png)
+![](安卓程序员需要知道的交叉编译和Makefile知识/c-c++.png)
 
 #### 预处理
 

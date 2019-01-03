@@ -1,16 +1,14 @@
 ---
-title: Android音视频（一）使用MediaRecorder录制视频
+title: Android Camera2预览及YUV数据获取
 date: 2018-12-26 14:27:01
 categories: 
-- 音视频
-- Android音视频
+- Android开发
 tags:
 - Camera2
+- 直播
 ---
 
-回到我的Android本行上，后面的音视频开发基本上就会基于Android应用，主要是我也不太会其他平台。。。
-
-第一篇Android音视频博客还是先了解下Camera2和MediaRecorder。
+最近打算做一个Android上的摄像头直播Demo，第一步就是Android摄像头的预览和视频数据获取了。
 
 ## Camera2
 

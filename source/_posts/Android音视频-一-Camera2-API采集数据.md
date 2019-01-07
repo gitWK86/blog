@@ -101,7 +101,7 @@ CaptureRequest描述是从图像传感器捕获单个图像的结果的子集的
 
 在这里还是过一遍整个流程，加深理解。
 
-### 1、 打开摄像头
+### 1、打开摄像头
 
 ```java
 private void openCamera(int width, int height) {
@@ -345,7 +345,7 @@ private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
 };
 ```
 
-### 录像
+### 4、录像
 
 主要看一下MediaRecorder录制视频相关代码
 

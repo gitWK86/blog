@@ -9,13 +9,13 @@ tags:
 
 这是Android音视频的第一篇文章，终于回到了我的老本行上，后面音视频开发会基于Android平台（关键我也不太会其他平台，后面会慢慢学习。。。）
 
-之前好像从来没有做过Camera相关的开发，这块对我来说还是有点陌生，所以从头开始学起。由于Google 现在已经不推荐使用Camera，所以就直接从Camera2开始咯。
+之前好像从来没有做过Camera相关的开发，这块对我来说还是有点陌生，所以从头开始学起。
 
 ## Camera2
 
 在Android API21中Google发布了Camera2来取代原本的Camera，两者的变动也是比较大的。
 
-![](Android-Camera2开发/camera2-1.png)
+![](Android音视频-一-Camera2-API采集数据/camera2-1.png)
 
 Camera2中Google采用了pipeline（管道）的概念，将Camera Device相机设备和Android Device安卓设备连接起来， Android Device通过管道发送CaptureRequest请求给Camera Device，Camera Device通过管道返回CameraMetadata数据给Android Device，这一切建立在一个叫作CameraCaptureSession的会话中。
 

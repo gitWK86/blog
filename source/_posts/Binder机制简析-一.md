@@ -22,7 +22,7 @@ Client、Service和Service Manager运行在用户空间，而Binder驱动程序�
 ### 一、Binder设备的初始化(binder_init)
 Binder设备的初始化是在Binder驱动程序的初始化函数binder_init中进行。主要工作就是在目标设备上创建一个Binder设备文件/dev/binder，这个设备文件的操作方法列表由全局变量`binder_fops`指定，主要提供`binder_open`、`binder_mmap`和`binder_ioctl`。
 
-```
+```c
 static const struct file_operations binder_fops = {
     .owner = THIS_MODULE,
     .poll = binder_poll,

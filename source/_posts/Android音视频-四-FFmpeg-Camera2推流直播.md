@@ -1,6 +1,6 @@
 ---
 title: Android音视频(三)FFmpeg Camera2推流直播
-date: 2019-01-08 11:07:25
+date: 2019-01-07 11:07:25
 categories: 
 - Android音视频
 tags:

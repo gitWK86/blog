@@ -11,7 +11,7 @@ tags:
 
 [Android音视频(二)音频AudioRecord和AudioTrack](https://david1840.github.io/2019/01/06/Android%E9%9F%B3%E8%A7%86%E9%A2%91-%E4%BA%8C-%E9%9F%B3%E9%A2%91AudioRecord%E5%92%8CAudioTrack/)
 
-[Android音视频(三)FFmpeg Camera2推流直播]()
+[Android音视频(三)FFmpeg Camera2推流直播](https://david1840.github.io/2019/01/07/Android%E9%9F%B3%E8%A7%86%E9%A2%91-%E5%9B%9B-FFmpeg-Camera2%E6%8E%A8%E6%B5%81%E7%9B%B4%E6%92%AD/)
 
 MediaCodec类可以访问底层媒体编解码框架（StageFright 或 OpenMAX），即编解码组件，它是Android基本的多媒体支持基础架构的一部分，通常和MediaExtractor、MediaSync、MediaMuxer、MediaCrypto、MediaDrm、Image、Surface和AudioTrack一起使用。它本身并不是Codec，它通过调用底层编解码组件获得了Codec的能力。
 

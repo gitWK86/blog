@@ -2,7 +2,7 @@
 title: SDL2事件处理
 date: 2019-04-15 15:51:06
 categories: 
-- FFmpeg
+- SDL2
 tags:
 - 音视频
 - SDL2
@@ -12,7 +12,7 @@ tags:
 
 ### SDL事件处理
 
-在SDL中，将所有的事件都存放在一个队列中，然后通过一个循环从队列中取出数据，进行处理，（做Android开发的朋友应该很熟悉这个了）。
+在SDL中，将所有的事件都存放在一个队列中，然后通过一个循环从队列中取出数据，进行处理，所有对事件的操作，其实就是对队列的操作。
 
 将上一篇中的代码`SDL_Delay(3000); // 延时3秒`改为：
 
@@ -34,19 +34,26 @@ while (quit) {
 
 #### 事件轮训方式
 
-SDL_WaitEvent  事件驱动方式，当列表中有事件存在才会触发处理流程
+SDL_WaitEvent: 事件驱动方式，当列表中有事件存在才会触发处理流程，否则处于阻塞状态，释放 CPU
 
-SDL_PollEvent 轮训方式，定时不断从列表中取出数据处理
+SDL_PollEvent: 轮训方式，定时不断从列表中取出数据处理（可能会导致CPU 100%） 
+
+SDL_WaitEventTimeout: 与SDL_WaitEvent的区别时，当到达超时时间后，退出阻塞状态。
+
+```
+即然有 SDL_WaitEvent了，为什么还要有SDL_PollEvent呢？这主要是由于使用的场景不同。对于游戏来说，它要求事件的实时处理，就使用SDL_PollEvent； 而对于一些其它实时性不高的情况来说，则可以使用 SDL_WaitEvent了。
+```
 
 #### SDL事件类型
 
-SDL_WindowEvent :窗口事件
+SDL_WindowEvent : Window窗口相关的事件。
 
-SDL_KeyBoardEvent:键盘事件
+SDL_KeyboardEvent : 键盘相关的事件。
 
-SDL_MouseMotionEvent:鼠标事件
+SDL_MouseMotionEvent : 鼠标移动相关的事件。
 
+SDL_QuitEvent : 退出事件。
 
+SDL_UserEvent : 用户自定义事件。
 
-### 
-
+具体信息可以查看[SDL Wiki](https://wiki.libsdl.org/SDL_Event)

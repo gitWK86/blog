@@ -12,7 +12,7 @@ SDL2第三篇。
 
 [SDL2入门](https://david1840.github.io/2019/04/11/SDL2%E9%9F%B3%E8%A7%86%E9%A2%91%E6%B8%B2%E6%9F%93%E5%85%A5%E9%97%A8/)
 
-[SDL2事件处理]()
+[SDL2事件处理](https://david1840.github.io/2019/04/15/SDL2%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86/)
 
 接下来就看下如何使用SDL如何通过SDL_Texture在窗口绘制图像。
 

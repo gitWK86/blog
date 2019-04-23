@@ -22,6 +22,20 @@ SDL2文章列表
 
 本篇博客使用FFmpeg+SDL2完成播放视频流Demo（仅播放视频），所有相关知识在之前的博客中都有提到，稍作整理完成。
 
+### 流程图：
+
+FFmpeg解码视频流：
+
+![](/FFmpeg-SDL2实现视频流播放/FFmpeg.png)
+
+SDL2显示YUV数据：
+
+![](/FFmpeg-SDL2实现视频流播放/SDL2.png)
+
+### 
+
+### 源码
+
 ```c
 #include <stdio.h>
 #include <SDL.h>

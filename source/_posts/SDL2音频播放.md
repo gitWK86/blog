@@ -1,5 +1,5 @@
 ---
-title: SDL2音频播放
+title: SDL2 PCM音频播放
 date: 2019-04-19 09:47:03
 categories: 
 - SDL2
@@ -146,3 +146,9 @@ int WinMain(int argc, char *argv[]) {
 OK！第一步完成，能正常播放出声音了。
 
 想要录制PCM自己试一下？可以试试用这个[Android音视频(五) OpenSL ES录制、播放音频(带源码)](https://david1840.github.io/2019/02/11/Android%E9%9F%B3%E8%A7%86%E9%A2%91-%E4%BA%94-OpenSL-ES%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/)录制一段。
+
+[源码 GitHub-SimplePlayer-pcm_player](https://github.com/David1840/SimplePlayer/blob/master/pcm_player.c)
+
+
+
+====== 更新 完成了FFmpeg+SDL2播放音频流的开发，代码请看[源码 GitHub-SimplePlayer-audio_player](https://github.com/David1840/SimplePlayer/blob/master/audio_player.c)

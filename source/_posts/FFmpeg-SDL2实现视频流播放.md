@@ -226,3 +226,94 @@ int WinMain(int argc, char *argv[]) {
 ![](/FFmpeg-SDL2实现视频流播放/1.png)
 
 这个Demo目前只是通过一个while循环将视频播放出来，所以可以播放视频但是速度不正常，并且没有声音，这些问题会在后面一一解决，最后完成一个简易的播放器。
+
+[源码 GitHub-SimplePlayer](https://github.com/David1840/SimplePlayer)
+
+
+
+====== 更新 2019-04-25，线程操作，使画面显示40ms一帧 ======
+
+```c
+#define REFRESH_EVENT  (SDL_USEREVENT + 1) //刷新事件
+#define BREAK_EVENT  (SDL_USEREVENT + 2) // 退出事件
+
+int thread_exit = 0;
+int thread_pause = 0;
+
+//线程每40ms刷新一次
+int video_refresh_thread(void *data) {
+    thread_exit = 0;
+    thread_pause = 0;
+
+    while (!thread_exit) {
+        if (!thread_pause) {
+            SDL_Event event;
+            event.type = REFRESH_EVENT;
+            SDL_PushEvent(&event);// 发送刷新事件
+        }
+        SDL_Delay(40);
+    }
+    thread_exit = 0;
+    thread_pause = 0;
+    //Break
+    SDL_Event event;
+    event.type = BREAK_EVENT;
+    SDL_PushEvent(&event);
+
+    return 0;
+}
+
+
+```
+
+```c
+//创建线程
+SDL_CreateThread(video_refresh_thread, "Video Thread", NULL);
+
+for (;;) {
+    SDL_WaitEvent(&event);//使用时间驱动，每40ms执行一次
+    if (event.type == REFRESH_EVENT) {
+        while (1) {
+            if (av_read_frame(pFormatCtx, &packet) < 0) 
+                thread_exit = 1;
+           
+            if (packet.stream_index == videoStream)
+                break;
+        }
+
+        if (packet.stream_index == videoStream) {
+            avcodec_send_packet(pCodecCtx, &packet);
+            while (avcodec_receive_frame(pCodecCtx, pFrame) == 0) {
+
+                SDL_UpdateYUVTexture(texture, NULL,
+                                     pFrame->data[0], pFrame->linesize[0],
+                                     pFrame->data[1], pFrame->linesize[1],
+                                     pFrame->data[2], pFrame->linesize[2]);
+
+                // Set Size of Window
+                rect.x = 0;
+                rect.y = 0;
+                rect.w = pCodecCtx->width;
+                rect.h = pCodecCtx->height;
+
+                SDL_RenderClear(renderer);
+                SDL_RenderCopy(renderer, texture, NULL, &rect);
+                SDL_RenderPresent(renderer);
+            }
+            av_packet_unref(&packet);
+        }
+    } else if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_SPACE) { //空格键暂停
+            thread_pause = !thread_pause;
+        }
+        if (event.key.keysym.sym== SDLK_ESCAPE){ // ESC键退出
+            thread_exit = 1;
+        }
+    } else if (event.type == SDL_QUIT) {
+        thread_exit = 1;
+    } else if (event.type == BREAK_EVENT) {
+        break;
+    }
+}
+```
+

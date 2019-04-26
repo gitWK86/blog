@@ -103,7 +103,7 @@ int WinMain() {
 
 
 
-![](/SDL2音视频渲染入门/SDL2-1.png)
+![](SDL2音视频渲染入门/SDL2-1.png)
 
 
 

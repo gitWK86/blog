@@ -26,11 +26,11 @@ SDL2文章列表
 
 FFmpeg解码视频流：
 
-![](/FFmpeg-SDL2实现视频流播放/FFmpeg.png)
+![](FFmpeg-SDL2实现视频流播放/FFmpeg.png)
 
 SDL2显示YUV数据：
 
-![](/FFmpeg-SDL2实现视频流播放/SDL2.png)
+![](FFmpeg-SDL2实现视频流播放/SDL2.png)
 
 ### 
 
@@ -223,7 +223,7 @@ int WinMain(int argc, char *argv[]) {
 
 ```
 
-![](/FFmpeg-SDL2实现视频流播放/1.png)
+![](FFmpeg-SDL2实现视频流播放/1.png)
 
 这个Demo目前只是通过一个while循环将视频播放出来，所以可以播放视频但是速度不正常，并且没有声音，这些问题会在后面一一解决，最后完成一个简易的播放器。
 

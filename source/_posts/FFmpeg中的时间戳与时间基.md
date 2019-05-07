@@ -14,8 +14,8 @@ tags:
 
 这两个概念其实在刚开始的时候就提到过，今天的概念跟它们还是有很大关系的，所以再说一次概念，具体解释请看[音视频基础概念](https://www.jianshu.com/p/e3acc140aa90)。
 
-- PTS: Decode Time Stamp，显示渲染用的时间戳，告诉我们什么时候需要显示
-- DTS: Presentation Time Stamp，视频解码时的时间戳，告诉我们什么时候需要解码
+- PTS: Presentation Time Stamp，显示渲染用的时间戳，告诉我们什么时候需要显示
+- DTS: Decode Time Stamp，视频解码时的时间戳，告诉我们什么时候需要解码
 
 
 

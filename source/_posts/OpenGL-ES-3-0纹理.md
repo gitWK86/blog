@@ -98,3 +98,136 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 ### 代码实现
 
+首先，定义顶点坐标和纹理坐标
+
+```Java
+/**
+ * 顶点坐标
+ * (x,y,z)
+ */
+private float[] POSITION_VERTEX = new float[]{
+        0f, 0f, 0f,     //顶点坐标V0
+        1f, 1f, 0f,     //顶点坐标V1
+        -1f, 1f, 0f,    //顶点坐标V2
+        -1f, -1f, 0f,   //顶点坐标V3
+        1f, -1f, 0f     //顶点坐标V4
+};
+
+/**
+ * 纹理坐标
+ * (s,t)
+ */
+private static final float[] TEX_VERTEX = {
+        0.5f, 0.5f, //纹理坐标V0
+        1f, 0f,     //纹理坐标V1
+        0f, 0f,     //纹理坐标V2
+        0f, 1.0f,   //纹理坐标V3
+        1f, 1.0f    //纹理坐标V4
+};
+```
+
+这里顶点坐标和纹理坐标是一一对应的，只是因为二者坐标原点不同，坐标值也不同，如下图。
+
+![](OpenGL-ES-3-0纹理/OpenGL-texture2.png)
+
+```java
+/**
+ * 索引，最终绘制时通过索引从顶点数据中取出对应顶点，再按照指定的方式进行绘制
+ */
+private static final short[] VERTEX_INDEX = {
+        0, 1, 2,  //V0,V1,V2 三个顶点组成一个三角形
+        0, 2, 3,  //V0,V2,V3 三个顶点组成一个三角形
+        0, 3, 4,  //V0,V3,V4 三个顶点组成一个三角形
+        0, 4, 1   //V0,V4,V1 三个顶点组成一个三角形
+};
+```
+
+
+
+```Java
+/**
+ * 顶点着色器
+ */
+private String vertextShader =
+                "#version 300 es\n" +
+                "layout (location = 0) in vec4 vPosition;\n" +
+                "layout (location = 1) in vec2 aTextureCoord;\n" +
+                "//矩阵\n" +
+                "uniform mat4 u_Matrix;\n"+
+                "//输出纹理坐标(s,t)\n" +
+                "out vec2 vTexCoord;\n" +
+                "void main() { \n" +
+                "     gl_Position  = u_Matrix * vPosition;\n" +
+                "     gl_PointSize = 10.0;\n" +
+                "     vTexCoord = aTextureCoord;\n" +
+                "}\n";
+
+
+```
+
+片段着色器应该接下来会把输出变量`vTexCoord`作为输入变量。
+
+片段着色器也应该能访问纹理对象，但是我们怎样能把纹理对象传给片段着色器呢？GLSL有一个供纹理对象使用的内建数据类型，叫做采样器(Sampler)，它以纹理类型作为后缀，比如`sampler1D`、`sampler3D`，或在我们的例子中的`sampler2D`。我们可以简单声明一个`uniform sampler2D`把一个纹理添加到片段着色器中，稍后我们会把纹理赋值给这个uniform。
+
+```Java
+/**
+ * 片段着色器
+ */
+private String fragmentShader =
+                "#version 300 es\n" +
+                "precision mediump float;\n" +
+                "uniform sampler2D uTextureUnit;\n" +
+                "//接收刚才顶点着色器传入的纹理坐标(s,t)\n" +
+                "in vec2 vTexCoord;\n" +
+                "out vec4 vFragColor;\n" +
+                "void main() {\n" +
+                "     vFragColor = texture(uTextureUnit,vTexCoord);\n" +
+                "}\n";
+```
+
+我们使用GLSL内建的texture函数来采样纹理的颜色，它第一个参数是纹理采样器，第二个参数是对应的纹理坐标。texture函数会使用之前设置的纹理参数对相应的颜色值进行采样。这个片段着色器的输出就是纹理的（插值）纹理坐标上的(过滤后的)颜色。
+
+```Java
+public static int loadTexture(Context context, int resourceId) {
+    final int[] textureIds = new int[1];
+    //创建一个纹理对象
+    GLES30.glGenTextures(1, textureIds, 0);
+    if (textureIds[0] == 0) {
+        Log.e(TAG, "Could not generate a new OpenGL textureId object.");
+        return 0;
+    }
+    final BitmapFactory.Options options = new BitmapFactory.Options();
+    //这里需要加载原图未经缩放的数据
+    options.inScaled = false;
+    final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
+    if (bitmap == null) {
+        Log.e(TAG, "Resource ID " + resourceId + " could not be decoded.");
+        GLES30.glDeleteTextures(1, textureIds, 0);
+        return 0;
+    }
+    // 绑定纹理到OpenGL
+    GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureIds[0]);
+
+    //设置默认的纹理过滤参数
+    GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR_MIPMAP_LINEAR);
+    GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
+
+    // 加载bitmap到纹理中
+    GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0);
+
+    // 生成MIP贴图
+    GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D);
+
+    // 数据如果已经被加载进OpenGL,则可以回收该bitmap
+    bitmap.recycle();
+
+    // 取消绑定纹理
+    GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0);
+
+    return textureIds[0];
+}
+```
+
+最终展示：
+
+![](OpenGL-ES-3-0纹理/OpenGL-show.png)

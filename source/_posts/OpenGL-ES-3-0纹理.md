@@ -72,6 +72,13 @@ GL_LINEAR（也叫线性过滤，(Bi)linear Filtering）它会基于纹理坐标
 
 GL_NEAREST产生了颗粒状的图案，我们能够清晰看到组成纹理的像素，而GL_LINEAR能够产生更平滑的图案，很难看出单个的纹理像素。GL_LINEAR可以产生更真实的输出，但有些开发者更喜欢8-bit风格，所以他们会用GL_NEAREST选项。
 
+当进行放大(Magnify)和缩小(Minify)操作的时候可以设置纹理过滤的选项，比如你可以在纹理被缩小的时候使用邻近过滤，被放大时使用线性过滤。我们需要使用glTexParameter*函数为放大和缩小指定过滤方式。这段代码看起来会和纹理环绕方式的设置很相似：
+
+```
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+```
+
 #### 多级渐远纹理
 
 想象一下，假设我们有一个包含着上千物体的大房间，每个物体上都有纹理。有些物体会很远，但其纹理会拥有与近处物体同样高的分辨率。由于远处的物体可能只产生很少的片段，OpenGL从高分辨率纹理中为这些片段获取正确的颜色值就很困难，因为它需要对一个跨过纹理很大部分的片段只拾取一个纹理颜色。在小物体上这会产生不真实的感觉，更不用说对它们使用高分辨率纹理浪费内存的问题了。
@@ -228,6 +235,37 @@ public static int loadTexture(Context context, int resourceId) {
 }
 ```
 
+绘制
+
+```Java
+@Override
+public void onDrawFrame(GL10 gl) {
+    GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
+
+    //使用程序片段
+    GLES30.glUseProgram(mProgram);
+
+    GLES30.glUniformMatrix4fv(uMatrixLocation, 1, false, mMatrix, 0);
+
+    GLES30.glEnableVertexAttribArray(0);
+    GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, 0, vertexBuffer);
+
+    GLES30.glEnableVertexAttribArray(1);
+    GLES30.glVertexAttribPointer(1, 2, GLES30.GL_FLOAT, false, 0, mTexVertexBuffer);
+
+    GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+    //绑定纹理
+    GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureId);
+
+    // 绘制
+    GLES20.glDrawElements(GLES20.GL_TRIANGLES, VERTEX_INDEX.length, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
+}
+```
+
 最终展示：
 
 ![](OpenGL-ES-3-0纹理/OpenGL-show.png)
+
+
+
+[源码Github](https://github.com/David1840/OpenGLES-Learning/blob/master/app/src/main/java/com/david/opengl/render/TextureRender.java)

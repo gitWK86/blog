@@ -197,3 +197,5 @@ camera = cameraProvider.bindToLifecycle(
 
 
 记得申请权限啊！`Manifest.permission.CAMERA`
+
+可以翻墙的请看原文：[Getting Started with CameraX](https://codelabs.developers.google.com/codelabs/camerax-getting-started/#0)

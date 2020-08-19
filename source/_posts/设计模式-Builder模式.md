@@ -20,3 +20,10 @@ tags:
 
 ## UML类图
 
+- Product产品类 —— 产品的抽象类
+- Builder——抽象Builder类，规范产品的组建
+- ConcreteBuilder——具体的Builder类
+- Director——统一组装过程
+
+![](设计模式-Builder模式/1.png)
+

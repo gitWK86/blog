@@ -1,6 +1,6 @@
 ---
-title: Android系统-深入理解ActivityManagerService(二)startActivity流程分析上(进程创建)
-date: 2021-03-29 15:59:16
+title: Android系统-深入理解ActivityManagerService(二)startActiviy流程分析
+date: 2021-03-29 18:59:16
 categories: 
 - Android系统
 tags:
@@ -14,9 +14,9 @@ startActivity又要分为两种情况，一个是我们在应用中去启动本�
 
 在Launcher中点击图标启动应用，都会调用startActivity方法
 
-## App层
+## 一、App层
 
-### Activity.java
+### 1.Activity.startActivityForResult
 
 ```java
 		@Override
@@ -75,7 +75,7 @@ startActivity又要分为两种情况，一个是我们在应用中去启动本�
     }
 ```
 
-### Instrumentation.java
+### 2.Instrumentation.startActivity
 
 ```java
  public ActivityResult execStartActivity(
@@ -113,7 +113,7 @@ startActivity又要分为两种情况，一个是我们在应用中去启动本�
 
 
 
-### ActivityManagerNative.java
+### 3.ActivityManagerNative.startActivity
 
 `frameworks/base/core/java/android/app/ActivityManagerNative.java`
 
@@ -243,9 +243,9 @@ public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
 
 最终在ActivityManagerNative中调用AMS的startActivity函数，接下来就交给AMS来处理逻辑。
 
-## System Server层
+## 二、System Server层
 
-### ActivityManagerService.java
+### 1. ActivityManagerService.startActivity
 
 `frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java`
 
@@ -277,7 +277,7 @@ public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
 
 AMS中调用ActivityStarter中的startActivityMayWait函数
 
-### ActivityStarter.java
+### 2. ActivityStarter.startActivityMayWait
 
 `frameworks/base/services/core/java/com/android/server/am/ActivityStarter.java`
 
@@ -294,16 +294,14 @@ AMS中调用ActivityStarter中的startActivityMayWait函数
         final Intent ephemeralIntent = new Intent(intent);
         // Don't modify the client's object!
         intent = new Intent(intent);
-
-      
         //收集Intent所指向的Activity信息, 当存在多个可供选择的Activity,则直接向用户弹出resolveActivity 
         ResolveInfo rInfo = mSupervisor.resolveIntent(intent, resolvedType, userId);
-        ......
         ActivityInfo aInfo = mSupervisor.resolveActivity(intent, rInfo, startFlags, profilerInfo);
         
         ......
 
             final ActivityRecord[] outRecord = new ActivityRecord[1];
+            //////////
             int res = startActivityLocked(caller, intent, ephemeralIntent, resolvedType,
                     aInfo, rInfo, voiceSession, voiceInteractor,
                     resultTo, resultWho, requestCode, callingPid,
@@ -329,9 +327,11 @@ AMS中调用ActivityStarter中的startActivityMayWait函数
     }
 ```
 
-在这个流程中就是用ActivityStackSupervisor的resolveIntent()和resolveActivity()来获取ActivityInfo信息, 然后再进入startActivityLocked()
+在这个流程中就是用ActivityStackSupervisor的resolveIntent()和resolveActivity()来找到相应的Activity组件, 然后再进入startActivityLocked()
 
-####  ActivityStackSupervisor
+####  2.1 ActivityStackSupervisor.resolveActivity
+
+`frameworks/base/services/core/java/com/android/server/am/ActivityStackSupervisor.java`
 
 ```java
 ActivityInfo resolveActivity(Intent intent, ResolveInfo rInfo, int startFlags,
@@ -387,4 +387,195 @@ ActivityInfo resolveActivity(Intent intent, ResolveInfo rInfo, int startFlags,
         return resolveActivity(intent, rInfo, startFlags, profilerInfo);
     }
 ```
+
+在ActivityStackSupervisor中调用PackageManagerService去解析Intent，来查询系统中所有符合要求的Activity，当存在多个满足条件的Activity则会弹框让用户来选择。
+
+#### 2.2 PMS.resolveIntent
+
+`frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java`
+
+```java
+		@Override
+    public ResolveInfo resolveIntent(Intent intent, String resolvedType,
+            int flags, int userId) {
+            flags = updateFlagsForResolve(flags, userId, intent);
+            enforceCrossUserPermission(Binder.getCallingUid(), userId,
+                    false /*requireFullPermission*/, false /*checkShell*/, "resolve intent");
+
+            Trace.traceBegin(TRACE_TAG_PACKAGE_MANAGER, "queryIntentActivities");
+            final List<ResolveInfo> query = queryIntentActivitiesInternal(intent, resolvedType,
+                    flags, userId);
+            Trace.traceEnd(TRACE_TAG_PACKAGE_MANAGER);
+
+            // 根据priority，preferred选择最佳的Activity
+            final ResolveInfo bestChoice =
+                    chooseBestActivity(intent, resolvedType, flags, query, userId);
+            return bestChoice;
+    }
+```
+
+#### 2.3 PMS.queryIntentActivities
+
+```java
+public List<ResolveInfo> queryIntentActivities(Intent intent,
+        String resolvedType, int flags, int userId) {
+    ...
+    ComponentName comp = intent.getComponent();
+    if (comp == null) {
+        if (intent.getSelector() != null) {
+            intent = intent.getSelector();
+            comp = intent.getComponent();
+        }
+    }
+
+    if (comp != null) {
+        final List<ResolveInfo> list = new ArrayList<ResolveInfo>(1);
+        //获取Activity信息
+        final ActivityInfo ai = getActivityInfo(comp, flags, userId);
+        if (ai != null) {
+            final ResolveInfo ri = new ResolveInfo();
+            ri.activityInfo = ai;
+            list.add(ri);
+        }
+        return list;
+    }
+    ...
+}
+```
+
+### 3. ActivityStarter.startActivityLocked
+
+```java
+final int startActivityLocked(IApplicationThread caller, Intent intent, Intent ephemeralIntent,
+            String resolvedType, ActivityInfo aInfo, ResolveInfo rInfo,
+            IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,
+            IBinder resultTo, String resultWho, int requestCode, int callingPid, int callingUid,
+            String callingPackage, int realCallingPid, int realCallingUid, int startFlags,
+            ActivityOptions options, boolean ignoreTargetSecurity, boolean componentSpecified,
+            ActivityRecord[] outActivity, ActivityStackSupervisor.ActivityContainer container,
+            TaskRecord inTask) {
+        int err = ActivityManager.START_SUCCESS;
+  
+        ......
+
+        doPendingActivityLaunchesLocked(false);
+
+        try {
+            mService.mWindowManager.deferSurfaceLayout();
+            err = startActivityUnchecked(r, sourceRecord, voiceSession, voiceInteractor, startFlags,
+                    true, options, inTask);
+        } finally {
+            mService.mWindowManager.continueSurfaceLayout();
+        }
+        postStartActivityUncheckedProcessing(r, err, stack.mStackId, mSourceRecord, mTargetStack);
+        return err;
+    }
+```
+
+### 4. ActivityStarter.startActivityUnchecked
+
+```java
+private int startActivityUnchecked(final ActivityRecord r, ActivityRecord sourceRecord,
+           IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,
+           int startFlags, boolean doResume, ActivityOptions options, TaskRecord inTask) {
+     ...  
+        mSupervisor.resumeFocusedStackTopActivityLocked();  
+     ... 
+       return START_SUCCESS;
+   }
+  
+```
+
+### 5. ActivityStackSupervisor.resumeFocusedStackTopActivityLocked
+
+```java
+boolean resumeFocusedStackTopActivityLocked(
+           ActivityStack targetStack, ActivityRecord target, ActivityOptions targetOptions) {
+       if (targetStack != null && isFocusedStack(targetStack)) {
+           return targetStack.resumeTopActivityUncheckedLocked(target, targetOptions);
+       }
+       final ActivityRecord r = mFocusedStack.topRunningActivityLocked();
+       if (r == null || r.state != RESUMED) {
+           mFocusedStack.resumeTopActivityUncheckedLocked(null, null);
+       }
+       return false;
+   }
+```
+
+### 6. ActivityStack.resumeTopActivityUncheckedLocked
+
+```java
+private boolean resumeTopActivityInnerLocked(ActivityRecord prev, ActivityOptions options) {
+      ...
+           mStackSupervisor.startSpecificActivityLocked(next, true, true);
+       }
+        if (DEBUG_STACK) mStackSupervisor.validateTopActivitiesLocked();
+       return true; 
+```
+
+### 7. ActivityStackSupervisor.startSpecificActivityLocked
+
+```java
+void startSpecificActivityLocked(ActivityRecord r,
+          boolean andResume, boolean checkConfig) {
+      ProcessRecord app = mService.getProcessRecordLocked(r.processName,
+              r.info.applicationInfo.uid, true);
+      r.task.stack.setLaunchTime(r);
+      if (app != null && app.thread != null) {//1
+          try {
+              if ((r.info.flags&ActivityInfo.FLAG_MULTIPROCESS) == 0
+                      || !"android".equals(r.info.packageName)) {
+                  app.addPackage(r.info.packageName, r.info.applicationInfo.versionCode,
+                          mService.mProcessStats);
+              }
+              // 真正去启动Activity
+              realStartActivityLocked(r, app, andResume, checkConfig);//2
+              return;
+          } catch (RemoteException e) {
+              Slog.w(TAG, "Exception when starting activity "
+                      + r.intent.getComponent().flattenToShortString(), e);
+          }
+      }
+      //当进程不存在则创建进程
+      mService.startProcessLocked(r.processName, r.info.applicationInfo, true, 0,
+              "activity", r.intent.getComponent(), false, false, true);
+  }
+```
+
+累啊，看了半天终于到关键的地方了。
+
+根据进程名称获取进程信息，如果进程存在，才到真正去启动Activity的地方，启动子Activity也就是在应用中启动其他Activity页面就会走这里。而进程如果不存在，就要走下面 mService.startProcessLocked去创建一个进程。还有可能是新创建的Activity被定义到一个新的进程，即定义了android:process，这样也会创建一个新的进程。
+
+进程创建最终是由Zygote fork出一个进程，在Android中所有的App进程都是由Zygote进程fork生成的。这个流程也是很复杂，这里就不继续看下去了，我们先看下启动Activity的流程。
+
+
+
+### 8. ActivityStackSupervisor.realStartActivityLocked
+
+```java
+final boolean realStartActivityLocked(ActivityRecord r, ProcessRecord app,
+            boolean andResume, boolean checkConfig) throws RemoteException {
+     				......
+            app.thread.scheduleLaunchActivity(new Intent(r.intent), r.appToken,
+                    System.identityHashCode(r), r.info, new Configuration(mService.mConfiguration),
+                    new Configuration(task.mOverrideConfig), r.compat, r.launchedFromPackage,
+                    task.voiceInteractor, app.repProcState, r.icicle, r.persistentState, results,
+                    newIntents, !andResume, mService.isNextTransitionForward(), profilerInfo);
+
+            ......
+
+        return true;
+    }
+
+```
+
+关键代码`app.thread.scheduleLaunchActivity`，这里我们认为App进程已经启动了，AMS中已经有了对应进程的ProcessRecord。
+
+app.thread类型为IApplicationThread，可以远程调用到ActivityThread的scheduleLaunchActivity方法，再发送H.LAUNCH_ACTIVITY消息，最终反射生成一个Activity。具体可见[Android系统-理解ActivityThread和App启动流程](https://david1840.github.io/2021/04/21/Android%E7%B3%BB%E7%BB%9F-%E7%90%86%E8%A7%A3ActivityThread%E5%92%8CApp%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/)
+
+
+
+### 9.调用流程
+
+![](Android系统-深入理解ActivityManagerService-二-startActivity流程分析/launch1.png)
 

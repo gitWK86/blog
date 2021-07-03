@@ -4,12 +4,13 @@ date: 2021-04-21 18:48:34
 categories: 
 - Android系统
 tags:
+- AMS
 - ActivityThread
 ---
 
 每一个App在启动时，都会由Zygote fork出一个进程，进程具有独立的资源空间，用于承载App上运行的各种Activity/Service等组件。
 
-当进程创建后就要真正去启动一个App了，那么App的入口函数是什么呢？答案是ActivityThread的main函数。
+当进程创建后就要真正去启动一个App了，那么App的入口函数是什么呢？答案是ActivityThread的main函数。（进程创建后反射调用ActivityThread main函数）
 
 `frameworks/base/core/java/android/app/ActivityThread.java`
 
@@ -121,6 +122,8 @@ private void attach(boolean system) {
     ......
 }
 ```
+
+**ApplicationThread**是ActivityThread内部类，继承自IApplicationThread.Stub，作为服务端接受AMS发出的请求并执行，ApplicationThread是ActivityThread与AMS连接的桥梁。
 
 attch方法实际调用了AMS的attachApplication方法，去看下AMS里的实现
 
@@ -372,7 +375,7 @@ final boolean realStartActivityLocked(ActivityRecord r, ProcessRecord app,
 
 `frameworks/base/core/java/android/app/ActivityThread.java`
 
-```
+```java
 				@Override
         public final void scheduleLaunchActivity(Intent intent, IBinder token, int ident,
                 ActivityInfo info, Configuration curConfig, Configuration overrideConfig,
@@ -385,7 +388,7 @@ final boolean realStartActivityLocked(ActivityRecord r, ProcessRecord app,
         }
 ```
 
-```
+```java
 case LAUNCH_ACTIVITY: {
             Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "activityStart");
             final ActivityClientRecord r = (ActivityClientRecord) msg.obj;

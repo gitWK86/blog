@@ -1,5 +1,5 @@
 ---
-title: Android包管理机制(一)PMS服务启动
+title: Android系统-包管理机制(一)PMS服务启动
 date: 2021-03-17 12:00:59
 categories: 
 - Android系统
@@ -14,6 +14,8 @@ PackageManagerService(简称PMS)，是Android系统中核心服务之一，管�
 ## SyetemServer处理
 
 SystemServer启动过程中启动服务
+
+`frameworks/base/services/java/com/android/server/SystemServer.java`
 
 ```Java
 private void run() {
@@ -144,13 +146,11 @@ private void run() {
     }
 ```
 
-
-
-
-
 ## PMS
 
 ### 构造方法
+
+`frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java`
 
 ```java
  public static PackageManagerService main(Context context, Installer installer,
@@ -317,7 +317,7 @@ Settings(File dataDir, Object lock) {
 
 #### mInstaller
 
-Installer继承自SystemService，和PMS、AMS一样是系统的服务(引导服务)，PMS很多的操作都是由Installer来完成的，比如APK的安装和卸载。在Installer内部，通过IInstalld和installd进行Binder通信，由位于nativie层的installd来完成具体的操作。
+Installer继承自SystemService，和PMS、AMS一样是系统的服务(引导服务)，PMS很多的操作都是由Installer来完成的，比如APK的安装和卸载。在Installer内部，通过socket与installd通信，（貌似8.0以上改成了IInstalld和installd进行Binder通信），由位于nativie层的installd来完成具体的操作。
 
 #### systemConfig
 

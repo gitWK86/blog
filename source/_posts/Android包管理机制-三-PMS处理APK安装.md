@@ -1,5 +1,5 @@
 ---
-title: Android包管理机制(三)PMS处理APK安装
+title: Android系统-包管理机制(三)PMS处理APK安装
 date: 2021-03-24 19:47:19
 categories: 
 - Android系统
@@ -39,7 +39,7 @@ void installStage(String packageName, File stagedDir, String stagedCid,
 
 在installStage函数中创建了类型为INIT_COPY的消息，接下来看看对INIT_COPY的处理
 
-### 对INIT_COPY的消息的处理
+## 1.对INIT_COPY的消息的处理
 
 ```java
 void doHandleMessage(Message msg) {
@@ -132,7 +132,7 @@ final private DefaultContainerConnection mDefContainerConn =
 
 
 
-### 对MCS_BOUND类型的消息的处理
+## 2.对MCS_BOUND类型的消息的处理
 
 ```java
 case MCS_BOUND: {
@@ -217,7 +217,7 @@ case MCS_BOUND: {
 
 否则取出安装请求队列第一个请求HandlerParams ，如果HandlerParams 不为null就会调用注释6处的HandlerParams的startCopy方法，用于开始复制APK的流程。
 
-### 复制APK
+## 3.复制APK
 
 HandlerParams是PMS中的抽象类，它的实现类为PMS的内部类InstallParams。HandlerParams的startCopy方法如下所示。
 
@@ -381,7 +381,7 @@ private int doCopyApk(IMediaContainerService imcs, boolean temp) throws RemoteEx
 
 doCopyApk函数的工作就是在/data/app下创建临时文件夹，以sessionId为临时文件夹名 ，例如/data/app/{sessionId}.tmp/base.apk将APK复制到这个文件夹下，一般命名为base.apk
 
-### 安装APK
+## 4.安装APK
 
 我们返回startCopy方法中，复制完成后调用handleReturnCode()，这个方法会调用到InstallParams的handleReturnCode方法
 
@@ -574,7 +574,7 @@ installPackageLI方法的代码这里截取主要的部分，主要做了几件�
 1. 创建PackageParser解析APK。
 2. 检查APK是否存在，如果存在就获取此前没被改名前的包名并赋值给PackageParser.Package类型的pkg，将标志位replace置为true表示是替换安装。
 3. 如果Settings中保存有要安装的APK的信息，说明此前安装过该APK，则需要校验APK的签名信息，确保安全的进行替换。
-4. 将临时文件重新命名，比如前面提到的/data/app/{sessionId}.tmp/base.apk，重命名为/data/app/包名-1/base.apk。这个新命名的包名会带上一个数字后缀1，每次升级一个已有的App，这个数字会不断的累加。
+4. 将临时文件重新命名，比如前面提到的/data/app/{sessionId}.tmp/base.apk，重命名为/data/app/包名-1/base.apk。这个新命名的包名会带上一个数字后缀1，每次升级一个已有的App，这个数字会不断的累加(/data/app/com.test.settings-2/base.apk)。
 5. 系统APP的更新安装会有两个限制，一个是系统APP不能在SD卡上替换安装，另一个是系统APP不能被Instant App替换。
 6. 根据replace来做区分，如果是替换安装就会调用replacePackageLIF方法，其方法内部还会对系统APP和非系统APP进行区分处理，如果是新安装APK会调用installNewPackageLIF方法。
 
@@ -616,11 +616,512 @@ installPackageLI方法的代码这里截取主要的部分，主要做了几件�
     }
 ```
 
-OK，APK的安装流程就到这里结束，还有一些后续的流程可以后面再学习。
+### 4.1 scanPackageTracedLI
+
+```java
+private PackageParser.Package scanPackageTracedLI(PackageParser.Package pkg,
+            final int policyFlags, int scanFlags, long currentTime, UserHandle user)
+                    throws PackageManagerException {
+     
+        final PackageParser.Package scannedPkg;
+        try {
+            // Scan the parent
+            scannedPkg = scanPackageLI(pkg, policyFlags, scanFlags, currentTime, user);
+            // Scan the children
+            final int childCount = (pkg.childPackages != null) ? pkg.childPackages.size() : 0;
+            for (int i = 0; i < childCount; i++) {
+                PackageParser.Package childPkg = pkg.childPackages.get(i);
+                scanPackageLI(childPkg, policyFlags,
+                        scanFlags, currentTime, user);
+            }
+        } finally {
+            Trace.traceEnd(TRACE_TAG_PACKAGE_MANAGER);
+        }
+
+        if ((scanFlags & SCAN_CHECK_ONLY) != 0) {
+            return scanPackageTracedLI(pkg, policyFlags, scanFlags, currentTime, user);
+        }
+        return scannedPkg;
+    }
+```
+
+```java
+private PackageParser.Package scanPackageLI(PackageParser.Package pkg, final int policyFlags,
+            int scanFlags, long currentTime, UserHandle user) throws PackageManagerException {
+        boolean success = false;
+        try {
+            final PackageParser.Package res = scanPackageDirtyLI(pkg, policyFlags, scanFlags,
+                    currentTime, user);
+            success = true;
+            return res;
+        } finally {
+            if (!success && (scanFlags & SCAN_DELETE_DATA_ON_FAILURES) != 0) {
+                destroyAppDataLIF(pkg, UserHandle.USER_ALL,
+                        StorageManager.FLAG_STORAGE_DE | StorageManager.FLAG_STORAGE_CE);
+                destroyAppProfilesLIF(pkg, UserHandle.USER_ALL);
+            }
+        }
+    }
+```
+
+#### 4.1.1 scanPackageDirtyLI
+
+最终调用到`scanPackageDirtyLI`方法，这个函数也是非常长，干了很多事，无论通过什么方式安装APK，最终都会调用到这里进行APK的实际安装过程。
+
+主要就是将App中的provider，service，receiver，activity全都保存到PMS的成员集合类中。
+
+```java
+private PackageParser.Package scanPackageDirtyLI(PackageParser.Package pkg,
+            final int policyFlags, final int scanFlags, long currentTime, UserHandle user)
+            throws PackageManagerException {
+        final File scanFile = new File(pkg.codePath);
+        ......
+
+            // // 处理provider
+            int N = pkg.providers.size();
+            StringBuilder r = null;
+            int i;
+            for (i=0; i<N; i++) {
+                PackageParser.Provider p = pkg.providers.get(i);
+                p.info.processName = fixProcessName(pkg.applicationInfo.processName,
+                        p.info.processName, pkg.applicationInfo.uid);
+                mProviders.addProvider(p);
+            }
+            // 处理service
+            N = pkg.services.size();
+            r = null;
+            for (i=0; i<N; i++) {
+                PackageParser.Service s = pkg.services.get(i);
+                s.info.processName = fixProcessName(pkg.applicationInfo.processName,
+                        s.info.processName, pkg.applicationInfo.uid);
+                mServices.addService(s);
+               
+            }
+          
+ 
+            // 处理receiver
+            N = pkg.receivers.size();
+            r = null;
+            for (i=0; i<N; i++) {
+                PackageParser.Activity a = pkg.receivers.get(i);
+                a.info.processName = fixProcessName(pkg.applicationInfo.processName,
+                        a.info.processName, pkg.applicationInfo.uid);
+                mReceivers.addActivity(a, "receiver");
+              
+            }
+            
+
+            // 处理activity
+            N = pkg.activities.size();
+            r = null;
+            for (i=0; i<N; i++) {
+                PackageParser.Activity a = pkg.activities.get(i);
+                a.info.processName = fixProcessName(pkg.applicationInfo.processName,
+                        a.info.processName, pkg.applicationInfo.uid);
+                mActivities.addActivity(a, "activity");
+            }
+            
+
+            // 处理permissionGroup权限组
+            N = pkg.permissionGroups.size();
+            r = null;
+            for (i=0; i<N; i++) {
+                PackageParser.PermissionGroup pg = pkg.permissionGroups.get(i);
+                PackageParser.PermissionGroup cur = mPermissionGroups.get(pg.info.name);
+                final String curPackageName = cur == null ? null : cur.info.packageName;
+                final boolean isPackageUpdate = pg.info.packageName.equals(curPackageName);
+                if (cur == null || isPackageUpdate) {
+                    mPermissionGroups.put(pg.info.name, pg);
+                }
+            }
+          
+
+            // 处理permission
+            N = pkg.permissions.size();
+            r = null;
+            for (i=0; i<N; i++) {
+                PackageParser.Permission p = pkg.permissions.get(i);
+
+                p.info.flags &= ~PermissionInfo.FLAG_INSTALLED;
+
+                if (pkg.applicationInfo.targetSdkVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    p.group = mPermissionGroups.get(p.info.group);
+                    // Warn for a permission in an unknown group.
+                    if (p.info.group != null && p.group == null) {
+                        Slog.w(TAG, "Permission " + p.info.name + " from package "
+                                + p.info.packageName + " in an unknown group " + p.info.group);
+                    }
+                }
+
+                ArrayMap<String, BasePermission> permissionMap =
+                        p.tree ? mSettings.mPermissionTrees
+                                : mSettings.mPermissions;
+                BasePermission bp = permissionMap.get(p.info.name);
+
+                // Allow system apps to redefine non-system permissions
+                if (bp != null && !Objects.equals(bp.sourcePackage, p.info.packageName)) {
+                    final boolean currentOwnerIsSystem = (bp.perm != null
+                            && isSystemApp(bp.perm.owner));
+                    if (isSystemApp(p.owner)) {
+                        if (bp.type == BasePermission.TYPE_BUILTIN && bp.perm == null) {
+                            // It's a built-in permission and no owner, take ownership now
+                            bp.packageSetting = pkgSetting;
+                            bp.perm = p;
+                            bp.uid = pkg.applicationInfo.uid;
+                            bp.sourcePackage = p.info.packageName;
+                            p.info.flags |= PermissionInfo.FLAG_INSTALLED;
+                        } else if (!currentOwnerIsSystem) {
+                            String msg = "New decl " + p.owner + " of permission  "
+                                    + p.info.name + " is system; overriding " + bp.sourcePackage;
+                            reportSettingsProblem(Log.WARN, msg);
+                            bp = null;
+                        }
+                    }
+                }
+
+                if (bp == null) {
+                    bp = new BasePermission(p.info.name, p.info.packageName,
+                            BasePermission.TYPE_NORMAL);
+                    permissionMap.put(p.info.name, bp);
+                }
+
+                if (bp.perm == null) {
+                    if (bp.sourcePackage == null
+                            || bp.sourcePackage.equals(p.info.packageName)) {
+                        BasePermission tree = findPermissionTreeLP(p.info.name);
+                        if (tree == null
+                                || tree.sourcePackage.equals(p.info.packageName)) {
+                            bp.packageSetting = pkgSetting;
+                            bp.perm = p;
+                            bp.uid = pkg.applicationInfo.uid;
+                            bp.sourcePackage = p.info.packageName;
+                            p.info.flags |= PermissionInfo.FLAG_INSTALLED;
+                            if ((policyFlags&PackageParser.PARSE_CHATTY) != 0) {
+                                if (r == null) {
+                                    r = new StringBuilder(256);
+                                } else {
+                                    r.append(' ');
+                                }
+                                r.append(p.info.name);
+                            }
+                        } else {
+                            Slog.w(TAG, "Permission " + p.info.name + " from package "
+                                    + p.info.packageName + " ignored: base tree "
+                                    + tree.name + " is from package "
+                                    + tree.sourcePackage);
+                        }
+                    } else {
+                        Slog.w(TAG, "Permission " + p.info.name + " from package "
+                                + p.info.packageName + " ignored: original from "
+                                + bp.sourcePackage);
+                    }
+                } else if ((policyFlags&PackageParser.PARSE_CHATTY) != 0) {
+                    if (r == null) {
+                        r = new StringBuilder(256);
+                    } else {
+                        r.append(' ');
+                    }
+                    r.append("DUP:");
+                    r.append(p.info.name);
+                }
+                if (bp.perm == p) {
+                    bp.protectionLevel = p.info.protectionLevel;
+                }
+            }
+
+            // 处理instrumentation
+            N = pkg.instrumentation.size();
+            r = null;
+            for (i=0; i<N; i++) {
+                PackageParser.Instrumentation a = pkg.instrumentation.get(i);
+                a.info.packageName = pkg.applicationInfo.packageName;
+                a.info.sourceDir = pkg.applicationInfo.sourceDir;
+                a.info.publicSourceDir = pkg.applicationInfo.publicSourceDir;
+                a.info.splitSourceDirs = pkg.applicationInfo.splitSourceDirs;
+                a.info.splitPublicSourceDirs = pkg.applicationInfo.splitPublicSourceDirs;
+                a.info.dataDir = pkg.applicationInfo.dataDir;
+                a.info.deviceProtectedDataDir = pkg.applicationInfo.deviceProtectedDataDir;
+                a.info.credentialProtectedDataDir = pkg.applicationInfo.credentialProtectedDataDir;
+
+                a.info.nativeLibraryDir = pkg.applicationInfo.nativeLibraryDir;
+                a.info.secondaryNativeLibraryDir = pkg.applicationInfo.secondaryNativeLibraryDir;
+                mInstrumentation.put(a.getComponentName(), a);
+               
+            }
+           
+            // 处理protectedBroadcast
+            if (pkg.protectedBroadcasts != null) {
+                N = pkg.protectedBroadcasts.size();
+                for (i=0; i<N; i++) {
+                    mProtectedBroadcasts.add(pkg.protectedBroadcasts.get(i));
+                }
+            }
+
+            // 设置时间戳为扫描文件的时间戳
+            pkgSetting.setTimeStamp(scanFileTime);
+           ......
+        return pkg;
+    }
+```
 
 
 
-感谢：
+### 4.2 updateSettingsLI
+
+更新Settings信息
+
+```java
+private void updateSettingsLI(PackageParser.Package newPackage, String installerPackageName,
+            int[] allUsers, PackageInstalledInfo res, UserHandle user) {
+        // Update the parent package setting
+        updateSettingsInternalLI(newPackage, installerPackageName, allUsers, res.origUsers,
+                res, user);
+        // Update the child packages setting
+        final int childCount = (newPackage.childPackages != null)
+                ? newPackage.childPackages.size() : 0;
+        for (int i = 0; i < childCount; i++) {
+            PackageParser.Package childPackage = newPackage.childPackages.get(i);
+            PackageInstalledInfo childRes = res.addedChildPackages.get(childPackage.packageName);
+            updateSettingsInternalLI(childPackage, installerPackageName, allUsers,
+                    childRes.origUsers, childRes, user);
+        }
+    }
+```
+
+```java
+   private void updateSettingsInternalLI(PackageParser.Package newPackage,
+            String installerPackageName, int[] allUsers, int[] installedForUsers,
+            PackageInstalledInfo res, UserHandle user) {
+        Trace.traceBegin(TRACE_TAG_PACKAGE_MANAGER, "updateSettings");
+
+        String pkgName = newPackage.packageName;
+        synchronized (mPackages) {
+            //write settings. the installStatus will be incomplete at this stage.
+            //note that the new package setting would have already been
+            //added to mPackages. It hasn't been persisted yet.
+            mSettings.setInstallStatus(pkgName, PackageSettingBase.PKG_INSTALL_INCOMPLETE);
+            Trace.traceBegin(TRACE_TAG_PACKAGE_MANAGER, "writeSettings");
+            mSettings.writeLPr();
+            Trace.traceEnd(TRACE_TAG_PACKAGE_MANAGER);
+        }
+
+        synchronized (mPackages) {
+            updatePermissionsLPw(newPackage.packageName, newPackage,
+                    UPDATE_PERMISSIONS_REPLACE_PKG | (newPackage.permissions.size() > 0
+                            ? UPDATE_PERMISSIONS_ALL : 0));
+            // For system-bundled packages, we assume that installing an upgraded version
+            // of the package implies that the user actually wants to run that new code,
+            // so we enable the package.
+            PackageSetting ps = mSettings.mPackages.get(pkgName);
+            final int userId = user.getIdentifier();
+            if (ps != null) {
+                if (isSystemApp(newPackage)) {
+                    if (DEBUG_INSTALL) {
+                        Slog.d(TAG, "Implicitly enabling system package on upgrade: " + pkgName);
+                    }
+                    // Enable system package for requested users
+                    if (res.origUsers != null) {
+                        for (int origUserId : res.origUsers) {
+                            if (userId == UserHandle.USER_ALL || userId == origUserId) {
+                                ps.setEnabled(COMPONENT_ENABLED_STATE_DEFAULT,
+                                        origUserId, installerPackageName);
+                            }
+                        }
+                    }
+                    // Also convey the prior install/uninstall state
+                    if (allUsers != null && installedForUsers != null) {
+                        for (int currentUserId : allUsers) {
+                            final boolean installed = ArrayUtils.contains(
+                                    installedForUsers, currentUserId);
+                            if (DEBUG_INSTALL) {
+                                Slog.d(TAG, "    user " + currentUserId + " => " + installed);
+                            }
+                            ps.setInstalled(installed, currentUserId);
+                        }
+                        // these install state changes will be persisted in the
+                        // upcoming call to mSettings.writeLPr().
+                    }
+                }
+                // It's implied that when a user requests installation, they want the app to be
+                // installed and enabled.
+                if (userId != UserHandle.USER_ALL) {
+                    ps.setInstalled(true, userId);
+                    ps.setEnabled(COMPONENT_ENABLED_STATE_DEFAULT, userId, installerPackageName);
+                }
+            }
+            res.name = pkgName;
+            res.uid = newPackage.applicationInfo.uid;
+            res.pkg = newPackage;
+            mSettings.setInstallStatus(pkgName, PackageSettingBase.PKG_INSTALL_COMPLETE);
+            mSettings.setInstallerPackageName(pkgName, installerPackageName);
+            res.setReturnCode(PackageManager.INSTALL_SUCCEEDED);
+            //to update install status
+            Trace.traceBegin(TRACE_TAG_PACKAGE_MANAGER, "writeSettings");
+            mSettings.writeLPr();
+            Trace.traceEnd(TRACE_TAG_PACKAGE_MANAGER);
+        }
+
+        Trace.traceEnd(TRACE_TAG_PACKAGE_MANAGER);
+    }
+```
+
+`mSettings.writeLPr();`会将APK的相关信息转为XML写到data/system/packages.xml中，并在data/system/packages.list增加APP信息。
+
+```java
+ void writeLPr() {
+
+        try {
+            FileOutputStream fstr = new FileOutputStream(mSettingsFilename);
+            BufferedOutputStream str = new BufferedOutputStream(fstr);
+
+            //XmlSerializer serializer = XmlUtils.serializerInstance();
+            XmlSerializer serializer = new FastXmlSerializer();
+            serializer.setOutput(str, StandardCharsets.UTF_8.name());
+            serializer.startDocument(null, true);
+            serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+
+            serializer.startTag(null, "packages");
+
+            for (int i = 0; i < mVersion.size(); i++) {
+                final String volumeUuid = mVersion.keyAt(i);
+                final VersionInfo ver = mVersion.valueAt(i);
+
+                serializer.startTag(null, TAG_VERSION);
+                XmlUtils.writeStringAttribute(serializer, ATTR_VOLUME_UUID, volumeUuid);
+                XmlUtils.writeIntAttribute(serializer, ATTR_SDK_VERSION, ver.sdkVersion);
+                XmlUtils.writeIntAttribute(serializer, ATTR_DATABASE_VERSION, ver.databaseVersion);
+                XmlUtils.writeStringAttribute(serializer, ATTR_FINGERPRINT, ver.fingerprint);
+                serializer.endTag(null, TAG_VERSION);
+            }
+          
+            ......
+          
+            mKeySetManagerService.writeKeySetManagerServiceLPr(serializer);
+
+            serializer.endTag(null, "packages");
+
+            serializer.endDocument();
+
+            str.flush();
+            FileUtils.sync(fstr);
+            str.close();
+
+            // New settings successfully written, old ones are no longer
+            // needed.
+            mBackupSettingsFilename.delete();
+            FileUtils.setPermissions(mSettingsFilename.toString(),
+                    FileUtils.S_IRUSR|FileUtils.S_IWUSR
+                    |FileUtils.S_IRGRP|FileUtils.S_IWGRP,
+                    -1, -1);
+
+            writeKernelMappingLPr();
+            /// package.list
+            writePackageListLPr();
+            writeAllUsersPackageRestrictionsLPr();
+            writeAllRuntimePermissionsLPr();
+            return;
+    }
+```
+
+`data/system/packages.xml`
+
+```xml
+<package name="com.My.app.test" codePath="/data/app/com.My.app.test-1" nativeLibraryPath="/data/app/com.My.app.test-1/lib" primaryCpuAbi="armeabi-v7a" publicFlags="944291396" privateFlags="0" ft="177d1e84078" it="177d1e863ca" ut="177d1e863ca" version="1" userId="10072">
+        <sigs count="1">
+            <cert index="1" />
+        </sigs>
+        <perms>
+            <item name="android.permission.BLUETOOTH" granted="true" flags="0" />
+            <item name="android.permission.INTERNET" granted="true" flags="0" />
+            <item name="android.permission.BLUETOOTH_ADMIN" granted="true" flags="0" />
+            <item name="android.permission.ACCESS_NETWORK_STATE" granted="true" flags="0" />
+            <item name="android.permission.ACCESS_WIFI_STATE" granted="true" flags="0" />
+        </perms>
+        <proper-signing-keyset identifier="9" />
+    </package>
+```
+
+`data/system/packages.list`
+
+```
+com.My.app.test 10072 0 /data/user/0/com.My.app.test default 3002,3003,3001
+```
+
+
+
+### 4.3 prepareAppDataAfterInstallLIF
+
+```java
+private void prepareAppDataAfterInstallLIF(PackageParser.Package pkg) {
+        final PackageSetting ps;
+        ......
+        prepareAppDataLIF(pkg, user.id, flags);
+          
+        }
+    }
+```
+
+
+
+```java
+private void prepareAppDataLIF(PackageParser.Package pkg, int userId, int flags) {
+        if (pkg == null) {
+            Slog.wtf(TAG, "Package was null!", new Throwable());
+            return;
+        }
+        prepareAppDataLeafLIF(pkg, userId, flags);
+        final int childCount = (pkg.childPackages != null) ? pkg.childPackages.size() : 0;
+        for (int i = 0; i < childCount; i++) {
+            prepareAppDataLeafLIF(pkg.childPackages.get(i), userId, flags);
+        }
+    }
+```
+
+```java
+ private void prepareAppDataLeafLIF(PackageParser.Package pkg, int userId, int flags) {
+        
+        final String volumeUuid = pkg.volumeUuid;
+        final String packageName = pkg.packageName;
+        final ApplicationInfo app = pkg.applicationInfo;
+        final int appId = UserHandle.getAppId(app.uid);
+
+        Preconditions.checkNotNull(app.seinfo);
+
+        ......
+        mInstaller.createAppData(volumeUuid, packageName, userId, flags,
+                    appId, app.seinfo, app.targetSdkVersion);
+        
+        .....
+        prepareAppDataContentsLeafLIF(pkg, userId, flags);
+    }
+```
+
+```java
+private void prepareAppDataContentsLeafLIF(PackageParser.Package pkg, int userId, int flags) {
+        final String volumeUuid = pkg.volumeUuid;
+        final String packageName = pkg.packageName;
+        final ApplicationInfo app = pkg.applicationInfo;
+
+        if ((flags & StorageManager.FLAG_STORAGE_CE) != 0) {
+            // Create a native library symlink only if we have native libraries
+            // and if the native libraries are 32 bit libraries. We do not provide
+            // this symlink for 64 bit libraries.
+            if (app.primaryCpuAbi != null && !VMRuntime.is64BitAbi(app.primaryCpuAbi)) {
+                final String nativeLibPath = app.nativeLibraryDir;
+                try {
+                    mInstaller.linkNativeLibraryDirectory(volumeUuid, packageName,
+                            nativeLibPath, userId);
+                } catch (InstallerException e) {
+                    Slog.e(TAG, "Failed to link native for " + packageName + ": " + e);
+                }
+            }
+        }
+    }
+```
+
+在整个流程中可以看到主要就两段：`mInstaller.createAppData`和 `mInstaller.linkNativeLibraryDirectory`，mInstaller我们之前有了解过，Installer继承自SystemService，和PMS、AMS一样是系统的服务(引导服务)，PMS很多的操作都是由Installer来完成的。它会与位于nativie层的installd守护进程通过socket通信来完成具体的操作。关于守护进程installd就在下一篇了解。
+
+参考：
 
 [BATcoder - 刘望舒](http://liuwangshu.cn/tags/Android%E5%8C%85%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6/)
 

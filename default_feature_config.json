@@ -1,0 +1,685 @@
+[
+    {
+        Version: "V1.015"
+    },
+    {
+            "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            },
+            {
+                "name": "debug",
+                "value": "false"
+            },
+            {
+                "name": "jankManager",
+                "value": "true"
+            },
+			{
+				"name": "ipelNode",
+				"value": [
+					{
+						"path": "/sys/kernel/ux_thread/ux_enable",
+						"value": "1"
+					},
+					{
+						"path": "/sys/kernel/ux_thread/ux_depth",
+						"value": "4"
+					},
+					{
+						"path": "/sys/kernel/ux_thread/ktc_enable",
+						"value": "1"
+					},
+					{
+						"path": "/sys/kernel/ux_thread/ux_migrate_delay",
+						"value": "20"
+					},
+					{
+						"path": "/sys/kernel/ux_thread/dynamic_maxruning_ms",
+						"value": "1000"
+					},
+					{
+						"path": "/sys/kernel/ux_thread/ux_max_thresh",
+						"value": "2000"
+					},
+					{
+						"path": "/sys/kernel/ux_thread/ux_sched_delay",
+						"value": "0"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_running_ctrl/ctrl",
+						"value": "1"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_running_ctrl/logp",
+						"value": "0"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_runable_ctrl/ctrl",
+						"value": "1"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_runable_ctrl/logp",
+						"value": "0"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_dstate_ctrl/ctrl",
+						"value": "1"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_dstate_ctrl/logp",
+						"value": "0"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_sleep_ctrl/ctrl",
+						"value": "1"
+					},
+					{
+						"path": "/proc/tcl_healthinfo/ux_sleep_ctrl/logp",
+						"value": "0"
+					},
+					{
+						"path": "/sys/kernel/binder_feature/binder_ux_priority_on",
+						"value": "1"
+					}
+				]
+			},
+			{
+				"name": "displayPerfSystem",
+				"value": "true"
+			},
+			{
+				"name": "boostTime",
+				"value": "400"
+			},
+			{
+				"name": "enableFrameBoost",
+				"value": "true"
+			},
+			{
+				"name": "enableSFWatchThread",
+				"value": "true"
+			}
+        ],
+        "project": {
+            "name": "IpelEngine",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            },
+            {
+                "name": "debug",
+                "value": "false"
+            },
+            {
+                "name": "freezeProcessList",
+                "value": [
+                    "xfar_core",
+                    "xiriservice_tcl",
+                    "xiriservice_tcl",
+                    "xiriservice_tcl",
+                    "xiriservice_tcl",
+                    "xiriservice_tcl"
+                ]
+            }
+        ],
+        "project": {
+            "name": "processFreeze",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            },
+            {
+                "name": "debug",
+                "value": "false"
+            },
+            {
+                "name": "freezeProcessList",
+                "value": [
+                    "com.google.android.tvlauncher",
+                    "com.tcl.guard:service",
+                    "com.tcl.guard",
+                    "com.google.android.tungsten.setupwraith",
+                    "com.tcl.initsetup",
+                    "com.android.providers.media.module",
+                    "tmmgr",
+                    "com.tcl.ttvs",
+                    "com.tcl.MultiScreenInteraction_TV:AirPlay",
+                    "com.tcl.MultiScreenInteraction_TV:Private",
+                    "com.tcl.MultiScreenInteraction_TV:HuaCast",
+                    "com.tcl.MultiScreenInteraction_TV",
+                    "com.tcl.miracast",
+                    "com.tcl.bi:service",
+                    "tcl_system_server",
+                    "com.tcl.tvinput",
+                    "com.tcl.framework.custom",
+                    "com.tcl.android.webview:webview_service",
+                    "com.tcl.partnercustomizer",
+                    "com.tcl.partnercustomizer:deamon",
+                    "com.tcl.partnercustomizer.resource",
+                    "com.android.vending:instant_app_installer",
+                    "com.android.vending:download_service",
+                    "com.tcl.versionUpdateApp",
+                    "com.tcl.versionUpdateApp:appUpdater",
+                    "com.tcl.ttvs.messagebox",
+                    "com.tcl.ttvs.core",
+                    "sitatvservice",
+                    "com.google.android.apps.mediashell",
+                    "com.google.android.gms",
+                    "com.google.android.katniss:search",
+                    "com.google.android.katniss:interactor"
+                ]
+            },
+            {
+                "name": "fastFreezeProcessList",
+                "value": [
+                    "com.iflytek.xiri",
+                    "com.iflytek.xiri2.system"
+                ]
+            }
+        ],
+        "project": {
+            "name": "freeze",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+          {
+            "name": "enable",
+            "value": "true"
+          },
+          {
+            "name": "debug",
+            "value": "false"
+          }
+        ],
+        "project": {
+            "name": "assert",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            }
+        ],
+        "project": {
+            "name": "fstrimConfig",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            }
+        ],
+        "project": {
+            "name": "fsyncConfig",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "false"
+            }
+        ],
+        "project": {
+            "name": "appresourcepreloadConfig",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            }
+        ],
+        "project": {
+            "name": "doFrameOpt",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            },
+            {
+                "name": "debug",
+                "value": "false"
+            },
+            {
+                "name": "preloadPackageList",
+                "value": [
+                    "com.google.android.videos",
+                    "com.tcl.gallery",
+                    "com.tcl.MultiScreenInteraction_TV",
+                    "com.google.android.play.games"
+                ]
+            },
+            {
+                "name": "minWidth",
+                "value": "900"
+            },
+            {
+                "name": "minHeight",
+                "value": "900"
+            },
+            {
+                "name": "maxSaveCount",
+                "value": "3"
+            },
+            {
+                "name": "maxFailNum",
+                "value": "5"
+            },
+            {
+                "name": "bootReset",
+                "value": "false"
+            },
+            {
+                "name": "versiontime",
+                "value": "20200710"
+            }
+        ],
+        "project": {
+            "name": "tclPreLoadSplash",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            },
+            {
+                "name": "debug",
+                "value": "false"
+            },
+            {
+                "name": "white_third_party_app",
+                "value": [
+                    "com.audiocn.kalaok.tv",
+                    "com.tcl.appreciate.art",
+                    "com.tcl.fm",
+                    "com.manmanapp.tv",
+                    "com.tcl.gamecenter",
+                    "com.tcl.ui_mediaCenter",
+                    "com.tcl.weixin",
+                    "com.huan.edu.lexue.frontend"
+                ]
+            }
+        ],
+        "project": {
+            "name": "startingWindow",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            }
+        ],
+        "project": {
+            "name": "GcTuning",
+            "type": "database"
+        }
+    },
+    {
+        "content":[
+            {
+                "name":"app_frame_block",
+                "value":[
+                    "false","60000ms"
+                ]
+            },
+            {
+                "name":"kernel_perf",
+                "value":[
+                    "false",""
+                ]
+            },
+            {
+                "name":"kernel_record",
+                "value":[
+                    "false","10800s"
+                ]
+            },
+            {
+                "name":"media_eeplayer",
+                "value":[
+                    "false",""
+                ]
+            },
+            {
+                "name":"tboost_block_info",
+                "value":[
+                    "false","60000ms"
+                ]
+            }
+        ],
+        "project": {
+            "name": "HealthInfo",
+            "type": "database"
+        }
+    },
+    {
+        "content":[
+            {
+                "name":"visibleProcessList",
+                "value":[
+                    "com.google.android.tvlauncher",
+                    "com.tcl.framework.custom",
+                    "com.tcl.sourcemananger",
+                    "com.tcl.settings",
+                    "com.tcl.common.terminalmanagerplus",
+                    "com.tcl.smartalexa",
+                    "com.tcl.versionUpdateApp",
+                    "com.android.externalstorage",
+                    "com.tcl.keyhelp",
+                    "com.google.android.tv.assistant",
+                    "com.android.providers.tv",
+                    "com.netflix.ninja"
+                ]
+            },
+            {
+                "name":"preptibleProcessList",
+                "value":[
+                    "com.google.process.gservices",
+                    "com.google.android.tts",
+                    "com.tcl.tv",
+                    "com.tcl.appstatecontroller",
+                    "com.tcl.ui_mediaCenter:scanUSBMedia",
+                    "com.tcl.tv:sandboxed_process",
+                    "com.tcl.tv:privileged_process"
+                ]
+            },
+            {
+                "name":"seviceProcessList",
+                "value":[
+                    "com.android.tv.settings",
+                    "com.tcl.autopair",
+                    "com.tcl.ui_mediaCenter",
+                    "com.android.vending:instant_app_installer",
+                    "com.tcl.bootadservice:bootad_tclpersis"
+                ]
+            },
+            {
+                "name":"seviceBProcessList",
+                "value":[
+                    "com.google.android.gsf.notouch",
+                    "com.google.android.tvtutorials",
+                    "com.google.android.play.games.ui",
+                    "com.android.vending",
+                    "com.google.android.gms.nearby.connection",
+                    "com.google.android.gms.unstable"
+                ]
+            },
+            {
+                "name":"systemProcessList",
+                "value":[
+                    "com.google.android.tungsten.setupwraith",
+                    "com.tcl.initsetup",
+                    "com.tcl.tvinput",
+                    "com.tcl.tvpassthrough"
+                ]
+            }
+        ],
+        "project": {
+            "name": "AdjAdjust",
+            "type": "database"
+        }
+    },
+    {
+        "content":[
+            {
+                "name":"standbyProcessBlackList",
+                "value":[
+                    "com.plexapp.android",
+                    "com.canal.android.canal",
+                    "com.mubi",
+                    "com.tubitv",
+                    "com.vectorunit.purple.googleplay",
+                    "com.vectorunit.mercury.googleplay",
+                    "com.hbo.hbonow",
+                    "com.future.HappyKids",
+                    "au.com.dok.mjd.mpfjwb",
+                    "com.xumo.xumo.tv",
+                    "com.onepeloton.callisto",
+                    "com.fox.now",
+                    "com.foxnews.android",
+                    "com.fng.foxnation",
+                    "com.twoergo.foxbusiness",
+                    "com.foxsports.videogo",
+                    "com.kptv.ott",
+                    "com.abclocal.wls.news",
+                    "com.abc.abcnews",
+                    "net.aljazeera.english",
+                    "com.vmn.android.comedycentral",
+                    "com.dailymotion.dailymotion",
+                    "com.epix.epix",
+                    "com.epix.epix.now",
+                    "com.google.android.youtube.tvunplugged",
+                    "com.turner.cnvideoapp",
+                    "com.bydeluxe.d3.android.program.starz"
+                ]
+            }
+        ],
+        "project": {
+            "name": "StandbyProcess",
+            "type": "database"
+        }
+    },
+    {
+               "content": [
+                {
+                    "name": "enable",
+                    "value": "true"
+                },
+                {
+                    "name": "traceCollectIntervalMs",
+                    "value": "200"
+                },
+                {
+                    "name": "slowDeliveryThresholdMs",
+                    "value": "300"
+                },
+                {
+                    "name": "slowDispatchThresholdMs",
+                    "value": "500"
+                },
+                {
+                    "name": "doFrameSlowDeliveryThresholdMs",
+                    "value": "300"
+                },
+                {
+                    "name": "doFrameSlowDispatchThresholdMs",
+                    "value": "300"
+                },
+                {
+                    "name": "doFrameSlowDispatchTimes",
+                    "value": "30"
+                },
+                {
+                    "name": "activitySlowDeliveryThresholdMs",
+                    "value": "300"
+                },
+                {
+                    "name": "activitySlowDispatchThresholdMs",
+                    "value": "300"
+                }],
+                "project": {
+                    "name":"BlockMonitor",
+                    "type": "database"
+                }
+    },
+    {
+            "content": [
+           {
+                "name": "enable",
+                "value": "true"
+           },
+           {
+                "name": "special_compile_apps_install_list",
+                "value": [
+                ]
+           },
+           {
+                "name": "special_compile_filter_install",
+                "value": "speed"
+           },
+           {
+                "name": "special_compile_apps_build_list",
+                "value": [
+                ]
+           },
+           {
+                "name": "special_compile_filter_build",
+                "value": "speed"
+           }
+           ],
+           "project": {
+                "name":"ArtOpt",
+                "type": "database"
+           }
+    },
+    {
+        "content": [{
+            "version": 1,
+            "subVersion": 5,
+            "enable": true,
+            "assocCtlEnable": false,
+            "controlSystemAppEnable": false,
+            "activityFunEnable": true,
+            "serviceFunEnable": true,
+            "broadcastFunEnable": true,
+            "providerFunEnable": true,
+            "reportEnable": true,
+            "reportType": 2,
+            "powerOnCtlTime": 60,
+            "procWhiteList": {
+                "packageName": []
+            },
+            "procBlackList": {
+                "packageName": []
+            },
+            "CTSList": {
+                "packageName": []
+            },
+            "autoStartWhiteList": {
+                "packageName": []
+            },
+            "assocStartWhiteList": {
+                "packageName": []
+            },
+            "activityBlackList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "activityRestrictionBgList": {
+                "packageName": []
+            },
+            "serviceWhiteList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "startServiceWhiteList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "alarmServiceWhiteList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "bindServiceWhiteList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "jobServiceWhiteList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "serviceStartForegroundWhiteList": {
+                "packageName": []
+            },
+            "restartServiceWhiteList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "broadcastWhiteList": {
+                "packageName": []
+            },
+            "broadcastBlackList": {
+                "packageName": []
+            },
+            "broadcastCalleeWhiteList": {
+                "packageName": []
+            },
+            "broadcastCalleeBlackList": {
+                "packageName": []
+            },
+            "providerWhiteList": {
+                "packageName": [],
+                "componentName": []
+            },
+            "providerBlackList": {
+                "packageName": [],
+                "componentName": []
+            }
+        }],
+        "project": {
+            "name":"AppBootPolicy",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "enable",
+                "value": "true"
+            }
+        ],
+        "project": {
+            "name":"AppRecord",
+            "type": "database"
+        }
+    },
+    {
+        "content": [
+            {
+                "name": "PersitentAppBlackList",
+                "value": [
+                    "com.tcl.factory.view"
+                ]
+            }
+        ],
+        "project": {
+            "name":"PersitentAppBlocker",
+            "type": "database"
+        }
+    }
+]
+
